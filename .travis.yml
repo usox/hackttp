@@ -1,0 +1,14 @@
+language: php
+sudo: required
+dist: trusty
+group: edge
+
+php:
+  - hhvm
+  - hhvm-nightly
+
+before_script: composer install
+
+script:
+  - hh_server --check $(pwd)
+  - vendor/bin/phpunit -c phpunit.xml.dist

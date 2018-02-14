@@ -1,0 +1,13 @@
+<phpunit bootstrap="vendor/autoload.php">
+	<logging>
+		<log type="coverage-html" target="dev/coverage" charset="UTF-8" highlight="true" />
+	</logging>
+	<testsuites>
+		<testsuite name="hack">
+			<directory suffix="Test.hh">tests</directory>
+		</testsuite>
+	</testsuites>
+	<php>
+		<ini name="date.timezone" value="Europe/Berlin" />
+	</php>
+</phpunit>
