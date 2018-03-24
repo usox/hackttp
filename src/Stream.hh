@@ -3,12 +3,13 @@
 namespace Usox\HackTTP;
 
 use Facebook\Experimental\Http\Message\StreamInterface;
+use HH\Lib\C;
 
 final class Stream implements StreamInterface {
 
 	private ?int $size;
 
-	private ?string $uri;
+	private bool $has_uri;
 
 	private bool $readable = false;
 
@@ -16,15 +17,15 @@ final class Stream implements StreamInterface {
 
 	private bool $seekable = false;
 
-	private static Vector<string> $read_modes = Vector{
+	private static vec<string> $read_modes = vec[
 		'r', 'w+', 'r+', 'x+', 'c+', 'rb', 'w+b', 'r+b', 'x+b',
 		'c+b', 'rt', 'w+t', 'r+t', 'x+t', 'c+t', 'a+'
-	};
+	];
 
-	private static Vector<string> $write_modes = Vector{
+	private static vec<string> $write_modes = vec[
 		'w', 'w+', 'rw', 'r+', 'x+', 'c+', 'wb', 'w+b', 'r+b',
 		'x+b', 'c+b', 'w+t', 'r+t', 'x+t', 'c+t', 'a', 'a+'
-	};
+	];
 
 	public function __construct(private ?resource $stream) {
 		if ($stream === null) {
@@ -33,9 +34,9 @@ final class Stream implements StreamInterface {
 
 		$meta = stream_get_meta_data($this->stream);
 		$this->seekable = (bool) $meta['seekable'];
-		$this->readable = static::$read_modes->linearSearch($meta['mode']) !== -1;
-		$this->writable = static::$write_modes->linearSearch($meta['mode']) !== -1;
-		$this->uri = (string) $this->getMetadata('uri');
+		$this->readable = C\contains(static::$read_modes, $meta['mode']);
+		$this->writable = C\contains(static::$write_modes, $meta['mode']);
+		$this->has_uri = $meta['uri'] !== null;
 	}
 
 	public function __destruct(): void {
@@ -69,8 +70,8 @@ final class Stream implements StreamInterface {
 		}
 
 		$result = $this->stream;
-		$this->stream = $this->size = $this->uri = null;
-		$this->readable = $this->writable = $this->seekable = false;
+		$this->stream = $this->size = null;
+		$this->has_uri = $this->readable = $this->writable = $this->seekable = false;
 
 		return $result;
 	}
@@ -84,7 +85,7 @@ final class Stream implements StreamInterface {
 			return null;
 		}
 
-		if ($this->uri !== null) {
+		if ($this->has_uri === true) {
 			clearstatcache();
 		}
 
@@ -190,16 +191,11 @@ final class Stream implements StreamInterface {
 		return $bytes;
 	}
 
-	public function getMetadata(?string $key = null): mixed {
+	public function getMetadata(): dict<string, mixed> {
 		if ($this->stream === null) {
-			return $key !== null ? null : [];
-		} elseif ($key === null) {
-			return stream_get_meta_data($this->stream);
+			return dict[];
 		}
-
-		$meta = stream_get_meta_data($this->stream);
-
-		return array_key_exists($key, $meta) ? $meta[$key] : null;
+		return dict(stream_get_meta_data($this->stream));
 	}
 
 	public function __toString(): string {

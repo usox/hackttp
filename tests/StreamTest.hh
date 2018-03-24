@@ -9,17 +9,20 @@ include_once 'vendor/hhvm/experimental-http-request-response-interfaces/src/Stre
 class StreamTest extends \PHPUnit_Framework_TestCase {
 	public static $isFReadError = false;
 
-	public function testconstructorinitializesproperties() {
+	public function testConstructorInitializesProperties() {
 		$handle = fopen('php://temp', 'r+');
 		fwrite($handle, 'data');
 		$stream = new Stream($handle);
+
+		$meta_data = $stream->getMetadata();
+
 		$this->assertTrue($stream->isReadable());
 		$this->assertTrue($stream->isWritable());
 		$this->assertTrue($stream->isSeekable());
-		$this->assertEquals('php://temp', $stream->getMetadata('uri'));
-		$this->assertInternalType('array', $stream->getMetadata());
+		$this->assertEquals('php://temp', $meta_data['uri']);
 		$this->assertEquals(4, $stream->getSize());
 		$this->assertFalse($stream->eof());
+
 		$stream->close();
 	}
 
@@ -121,8 +124,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse($stream->isWritable());
 		$this->assertFalse($stream->isSeekable());
 		$this->assertNull($stream->getSize());
-		$this->assertSame([], $stream->getMetadata());
-		$this->assertNull($stream->getMetadata('foo'));
+		$this->assertEquals(dict[], $stream->getMetadata());
 
 		$throws = function ($fn) {
 			try {

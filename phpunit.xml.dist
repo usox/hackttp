@@ -1,4 +1,4 @@
-<phpunit bootstrap="vendor/autoload.php">
+<phpunit bootstrap="vendor/hh_autoload.php">
 	<logging>
 		<log type="coverage-html" target="dev/coverage" charset="UTF-8" highlight="true" />
 	</logging>

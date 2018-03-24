@@ -14,7 +14,8 @@
 	],
 	"require": {
 		"hhvm": ">=3.24",
-		"hhvm/experimental-http-request-response-interfaces": "dev-master"
+		"hhvm/experimental-http-request-response-interfaces": "dev-master",
+		"hhvm/hsl": "^1.3"
 	},
 	"require-dev": {
 		"facebook/fbexpect": "^0.4.1"
