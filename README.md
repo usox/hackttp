@@ -4,3 +4,5 @@ HackTTP - Experimental implementation of hack-http-request-response-interfaces
 ==============================================================================
 
 # DO NOT USE #
+
+## Yep, this is inspired by guzzles psr7 implementation ##
