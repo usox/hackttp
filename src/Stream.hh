@@ -43,7 +43,7 @@ final class Stream implements StreamInterface {
 		$this->close();
 	}
 
-	public function getContents(): string {
+	public function getRemainingContents(): string {
 		if ($this->stream === null) {
 			throw new \RuntimeException('Stream is detached');
 		}
@@ -55,6 +55,12 @@ final class Stream implements StreamInterface {
 		}
 
 		return $contents;
+	}
+
+	public function getFullContents(): string {
+		$this->seek(0);
+
+		return $this->getRemainingContents();
 	}
 
 	public function close(): void {

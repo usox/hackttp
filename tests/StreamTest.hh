@@ -42,14 +42,23 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 		$stream->close();
 	}
 
-	public function testGetsContents() {
+	public function testGetsFullContents() {
 		$handle = fopen('php://temp', 'w+');
 		fwrite($handle, 'data');
 		$stream = new Stream($handle);
-		$this->assertEquals('', $stream->getContents());
+		$this->assertEquals('', $stream->getRemainingContents());
 		$stream->seek(0);
-		$this->assertEquals('data', $stream->getContents());
-		$this->assertEquals('', $stream->getContents());
+		$this->assertEquals('data', $stream->getRemainingContents());
+		$this->assertEquals('', $stream->getRemainingContents());
+		$stream->close();
+	}
+
+	public function testGetRemainingContentsReturnsTheCompleteStream() {
+		$handle = fopen('php://temp', 'w+');
+		fwrite($handle, 'data');
+		$stream = new Stream($handle);
+		$this->assertEquals('data', (string) $stream->getFullContents());
+		$this->assertEquals('data', (string) $stream->getFullContents());
 		$stream->close();
 	}
 
@@ -143,7 +152,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 		$throws(function () use ($stream) { $stream->seek(10); });
 		$throws(function () use ($stream) { $stream->tell(); });
 		$throws(function () use ($stream) { $stream->eof(); });
-		$throws(function () use ($stream) { $stream->getContents(); });
+		$throws(function () use ($stream) { $stream->getRemainingContents(); });
+		$throws(function () use ($stream) { $stream->getFullContents(); });
 	}
 
 	public function testStreamReadingWithZeroLength() {
