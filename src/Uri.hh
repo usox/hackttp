@@ -26,62 +26,66 @@ final class Uri implements UriInterface {
 
 	private static string $char_sub_delimeters = '!\$&\'\(\)\*\+,;=';
 
-	private string $scheme = '';
+	private ?string $scheme;
 
-	private string $user_name = '';
+	private ?string $user_name;
 
-	private ?string $user_password = '';
+	private ?string $user_password;
 
-	private string $host = '';
+	private ?string $host;
 
 	private ?int $port;
 
-	private string $path = '';
+	private ?string $path;
 
-	private string $query = '';
+	private ?string $query;
 
-	private string $fragment = '';
+	private ?string $fragment;
 
-	public function __construct(string $uri): void {
-		if ($uri != '') {
+	public function __construct(?string $uri = null): void {
+		if ($uri !== null) {
 			$this->loadFromUri($uri);
 		}
 	}
 
 	public function __toString(): string {
-		$uri = $this->scheme.':';
+		$uri = '';
+
+		if ($this->scheme !== null) {
+			$uri .= $this->scheme.':';
+		}
 
 		$authority = $this->getAuthority();
 
-		if ($authority != '' || $this->scheme === 'file') {
+		if ($authority !== '' || $this->scheme === 'file') {
 			$uri .= '//' . $authority;
 		}
 
 		$uri .= $this->path;
 
-		if ($this->query != '') {
+		if ($this->query !== null) {
 			$uri .= '?'.$this->query;
 		}
 
-		if ($this->fragment != '') {
+		if ($this->fragment !== null) {
 			$uri .= '#'.$this->fragment;
 		}
 
 		return $uri;
 	}
 
-	public function getScheme(): string {
+	public function getScheme(): ?string {
 		return $this->scheme;
 	}
 
 	public function getAuthority(): string {
-		$authority = $this->host;
+		$authority = (string) $this->host;
 
 		$user_info = '';
-		if ($this->user_name !== '') {
+		if ($this->user_name !== null && $this->user_name !== '') {
 			$user_info = $this->user_name;
 
-			if ((string) $this->user_password !== '') {
+			if ($this->user_password !== null) {
 				$user_info .= sprintf(':%s', $this->user_password);
 			}
 
@@ -104,12 +108,12 @@ final class Uri implements UriInterface {
 			return null;
 		}
 		return shape(
-			'user' => $this->user_name,
+			'user' => (string) $this->user_name,
 			'pass' => $this->user_password
 		);
 	}
 
-	public function getHost(): string {
+	public function getHost(): ?string {
 		return $this->host;
 	}
 
@@ -117,19 +121,19 @@ final class Uri implements UriInterface {
 		return $this->port;
 	}
 
-	public function getPath(): string{
+	public function getPath(): ?string{
 		return $this->path;
 	}
 
-	public function getQuery(): string {
+	public function getQuery(): ?string {
 		return $this->query;
 	}
 
-	public function getFragment(): string {
+	public function getFragment(): ?string {
 		return $this->fragment;
 	}
 
-	public function withScheme(string $scheme): this {
+	public function withScheme(?string $scheme): this {
 		$scheme = $this->filterScheme($scheme);
 
 		if ($this->scheme === $scheme) {
@@ -157,7 +161,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withHost(string $host): this {
+	public function withHost(?string $host): this {
 		$host = $this->filterHost($host);
 
 		if ($this->host === $host) {
@@ -186,7 +190,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withPath(string $path): this {
+	public function withPath(?string $path): this {
 		$path = $this->filterPath($path);
 
 		if ($this->path === $path) {
@@ -200,7 +204,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withQuery(string  $query): this {
+	public function withQuery(?string  $query): this {
 		$query = $this->filterQueryAndFragment($query);
 
 		if ($this->query === $query) {
@@ -213,7 +217,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withFragment(string $fragment): this {
+	public function withFragment(?string $fragment): this {
 		$fragment = $this->filterQueryAndFragment($fragment);
 
 		if ($this->fragment === $fragment) {
@@ -231,43 +235,45 @@ final class Uri implements UriInterface {
 		if ($parts === false) {
 			throw new \InvalidArgumentException("Unable to parse URI: $uri");
 		}
-		if (C\contains($parts, 'scheme')) {
+		if (C\contains_key($parts, 'scheme')) {
 			$this->scheme = $this->filterScheme((string) $parts['scheme']);
 		}
-		if (C\contains($parts, 'host')) {
+		if (C\contains_key($parts, 'host')) {
 			$this->host = $this->filterHost((string) $parts['host']);
 		}
-		if (C\contains($parts, 'port') && $parts['port'] !== null) {
+		if (C\contains_key($parts, 'port') && $parts['port'] !== null) {
 			$this->port = $this->filterPort((int) $parts['port']);
 		}
-		if (C\contains($parts, 'path')) {
+		if (C\contains_key($parts, 'path')) {
 			$this->path = $this->filterPath((string) $parts['path']);
 		}
-		if (C\contains($parts, 'query')) {
+		if (C\contains_key($parts, 'query')) {
 			$this->query = $this->filterQueryAndFragment((string) $parts['query']);
 		}
-		if (C\contains($parts, 'fragment')) {
+		if (C\contains_key($parts, 'fragment')) {
 			$this->fragment = $this->filterQueryAndFragment((string) $parts['fragment']);
 		}
-		if (C\contains($parts, 'user')) {
+		if (C\contains_key($parts, 'user')) {
 			$this->user_name = (string) $parts['user'];
 		}
-		if (C\contains($parts, 'pass')) {
+		if (C\contains_key($parts, 'pass')) {
 			$this->user_password = (string) $parts['pass'];
 		}
 
 		$this->removeDefaultPort();
 	}
 
-	private function filterScheme(string $scheme): string {
+	private function filterScheme(?string $scheme): ?string {
+		if ($scheme === null) {
+			return null;
+		}
 		return strtolower($scheme);
 	}
 
-	private function filterHost(string $host): string {
-		if (!is_string($host)) {
-			throw new \InvalidArgumentException('Host must be a string');
+	private function filterHost(?string $host): ?string {
+		if ($host === null) {
+			return null;
 		}
-
 		return strtolower($host);
 	}
 
@@ -287,12 +293,18 @@ final class Uri implements UriInterface {
 	}
 
 	private function removeDefaultPort(): void {
-		if ($this->port !== null && C\contains(static::$default_ports, $this->scheme) && $this->port === static::$default_ports[$this->scheme]) {
+		if (
+			$this->port !== null &&
+			C\contains_key(static::$default_ports, (string) $this->scheme) && $this->port === static::$default_ports[(string) $this->scheme]
+		) {
 			$this->port = null;
 		}
 	}
 
-	private function filterPath(string $path): string {
+	private function filterPath(?string $path): ?string {
+		if ($path === null) {
+			return null;
+		}
 		return preg_replace_callback(
 			'/(?:[^' . static::$char_unreserved . static::$char_sub_delimeters . '%:@\/]++|%(?![A-Fa-f0-9]{2}))/',
 			function ($match) {
@@ -302,7 +314,10 @@ final class Uri implements UriInterface {
 		);
 	}
 
-	private function filterQueryAndFragment(string $str): string {
+	private function filterQueryAndFragment(?string $str): ?string {
+		if ($str === null) {
+			return null;
+		}
 		return preg_replace_callback(
 			'/(?:[^' . static::$char_unreserved . static::$char_sub_delimeters . '%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/',
 			function ($match) {
@@ -313,18 +328,19 @@ final class Uri implements UriInterface {
 	}
 
 	private function validateState(): void {
-		if ($this->host === '' && ($this->scheme === 'http' || $this->scheme === 'https')) {
+		if ($this->host === null && ($this->scheme === 'http' || $this->scheme === 'https')) {
 			$this->host = static::HTTP_DEFAULT_HOST;
 		}
+		$path = (string) $this->path;
 
 		if ($this->getAuthority() === '') {
-			if (0 === strpos($this->path, '//')) {
+			if (0 === strpos($path, '//')) {
 				throw new \InvalidArgumentException('The path of a URI without an authority must not start with two slashes "//"');
 			}
-			if ($this->scheme === '' && false !== strpos(explode('/', $this->path, 2)[0], ':')) {
+			if ($this->scheme === null && false !== strpos(explode('/', $path, 2)[0], ':')) {
 				throw new \InvalidArgumentException('A relative URI must not have a path beginning with a segment containing a colon');
 			}
-		} elseif (strpos($this->path, '/') !== 0) {
+		} elseif ($path !== '' && strpos($path, '/') !== 0) {
 			throw new \InvalidArgumentException('The path of a URI with an authority must start with a slash "/" or be empty');
 		}
 	}
