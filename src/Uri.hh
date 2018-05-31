@@ -2,7 +2,7 @@
 namespace Usox\HackTTP;
 
 use Facebook\Experimental\Http\Message\UriInterface;
-use HH\Lib\C;
+use HH\Lib\{C, Str};
 
 final class Uri implements UriInterface {
 
@@ -86,10 +86,10 @@ final class Uri implements UriInterface {
 			$user_info = $this->user_name;
 
 			if ($this->user_password !== null) {
-				$user_info .= sprintf(':%s', $this->user_password);
+				$user_info .= Str\format(':%s', $this->user_password);
 			}
 
-			$authority = sprintf(
+			$authority = Str\format(
 				'%s@%s',
 				$user_info,
 				$authority
@@ -97,7 +97,7 @@ final class Uri implements UriInterface {
 		}
 
 		if ($this->port !== null) {
-			$authority .= sprintf(':%d', $this->port);
+			$authority .= Str\format(':%d', $this->port);
 		}
 
 		return $authority;
@@ -148,7 +148,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withUserInfo(string $user, ?string $password = null): this {
+	public function withUserInfo(?string $user, ?string $password = null): this {
 		if ($this->user_name === $user && $this->user_password === $password) {
 			return $this;
 		}
@@ -161,7 +161,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withHost(?string $host): this {
+	public function withHost(?string $host = null): this {
 		$host = $this->filterHost($host);
 
 		if ($this->host === $host) {
@@ -175,7 +175,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withPort(?int $port): this {
+	public function withPort(?int $port = null): this {
 		$port = $this->filterPort($port);
 
 		if ($this->port === $port) {
@@ -190,7 +190,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withPath(?string $path): this {
+	public function withPath(?string $path = null): this {
 		$path = $this->filterPath($path);
 
 		if ($this->path === $path) {
@@ -204,7 +204,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withQuery(?string  $query): this {
+	public function withQuery(?string  $query = null): this {
 		$query = $this->filterQueryAndFragment($query);
 
 		if ($this->query === $query) {
@@ -217,7 +217,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withFragment(?string $fragment): this {
+	public function withFragment(?string $fragment = null): this {
 		$fragment = $this->filterQueryAndFragment($fragment);
 
 		if ($this->fragment === $fragment) {
@@ -231,7 +231,7 @@ final class Uri implements UriInterface {
 	}
 
 	private function loadFromUri(string $uri): void {
-		$parts = parse_url($uri);
+		$parts = \parse_url($uri);
 		if ($parts === false) {
 			throw new \InvalidArgumentException("Unable to parse URI: $uri");
 		}
@@ -267,14 +267,14 @@ final class Uri implements UriInterface {
 		if ($scheme === null) {
 			return null;
 		}
-		return strtolower($scheme);
+		return Str\lowercase($scheme);
 	}
 
 	private function filterHost(?string $host): ?string {
 		if ($host === null) {
 			return null;
 		}
-		return strtolower($host);
+		return Str\lowercase($host);
 	}
 
 	private function filterPort(?int $port): ?int {
@@ -286,7 +286,7 @@ final class Uri implements UriInterface {
 
 		if (1 > $port || $max_port < $port) {
 			throw new \InvalidArgumentException(
-				sprintf('Invalid port: %d. Must be between 1 and %d', $port, $max_port)
+				Str\format('Invalid port: %d. Must be between 1 and %d', $port, $max_port)
 			);
 		}
 		return $port;
@@ -305,10 +305,10 @@ final class Uri implements UriInterface {
 		if ($path === null) {
 			return null;
 		}
-		return preg_replace_callback(
+		return \preg_replace_callback(
 			'/(?:[^' . static::$char_unreserved . static::$char_sub_delimeters . '%:@\/]++|%(?![A-Fa-f0-9]{2}))/',
 			function ($match) {
-				return rawurlencode($match[0]);
+				return \rawurlencode($match[0]);
 			},
 			$path
 		);
@@ -318,10 +318,10 @@ final class Uri implements UriInterface {
 		if ($str === null) {
 			return null;
 		}
-		return preg_replace_callback(
+		return \preg_replace_callback(
 			'/(?:[^' . static::$char_unreserved . static::$char_sub_delimeters . '%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/',
 			function ($match) {
-				return rawurlencode($match[0]);
+				return \rawurlencode($match[0]);
 			},
 			$str
 		);
@@ -334,13 +334,13 @@ final class Uri implements UriInterface {
 		$path = (string) $this->path;
 
 		if ($this->getAuthority() === '') {
-			if (0 === strpos($path, '//')) {
+			if (0 === Str\search($path, '//')) {
 				throw new \InvalidArgumentException('The path of a URI without an authority must not start with two slashes "//"');
 			}
-			if ($this->scheme === null && false !== strpos(explode('/', $path, 2)[0], ':')) {
+			if ($this->scheme === null && null !== Str\search(\explode('/', $path, 2)[0], ':')) {
 				throw new \InvalidArgumentException('A relative URI must not have a path beginning with a segment containing a colon');
 			}
-		} elseif ($path !== '' && strpos($path, '/') !== 0) {
+		} elseif ($path !== '' && Str\search($path, '/') !== 0) {
 			throw new \InvalidArgumentException('The path of a URI with an authority must start with a slash "/" or be empty');
 		}
 	}

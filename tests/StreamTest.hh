@@ -26,13 +26,6 @@ class StreamTest extends \PHPUnit_Framework_TestCase {
 		$stream->close();
 	}
 
-	public function testStreamClosesHandleOnDestruct() {
-		$handle = fopen('php://temp', 'r');
-		$stream = new Stream($handle);
-		unset($stream);
-		$this->assertFalse(is_resource($handle));
-	}
-
 	public function testConvertsToString() {
 		$handle = fopen('php://temp', 'w+');
 		fwrite($handle, 'data');

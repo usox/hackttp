@@ -32,15 +32,11 @@ final class Stream implements StreamInterface {
 			throw new \InvalidArgumentException('Stream must be a resource');
 		}
 
-		$meta = stream_get_meta_data($this->stream);
+		$meta = \stream_get_meta_data($this->stream);
 		$this->seekable = (bool) $meta['seekable'];
 		$this->readable = C\contains(static::$read_modes, $meta['mode']);
 		$this->writable = C\contains(static::$write_modes, $meta['mode']);
 		$this->has_uri = $meta['uri'] !== null;
-	}
-
-	public function __destruct(): void {
-		$this->close();
 	}
 
 	public function getRemainingContents(): string {
@@ -48,7 +44,7 @@ final class Stream implements StreamInterface {
 			throw new \RuntimeException('Stream is detached');
 		}
 
-		$contents = stream_get_contents($this->stream);
+		$contents = \stream_get_contents($this->stream);
 
 		if ($contents === false) {
 			throw new \RuntimeException('Unable to read stream contents');
@@ -65,7 +61,7 @@ final class Stream implements StreamInterface {
 
 	public function close(): void {
 		if ($this->stream !== null) {
-			fclose($this->stream);
+			\fclose($this->stream);
 			$this->detach();
 		}
 	}
@@ -92,12 +88,12 @@ final class Stream implements StreamInterface {
 		}
 
 		if ($this->has_uri === true) {
-			clearstatcache();
+			\clearstatcache();
 		}
 
-		$stats = fstat($this->stream);
+		$stats = \fstat($this->stream);
 
-		if (array_key_exists('size', $stats)) {
+		if (C\contains_key($stats, 'size')) {
 			$this->size = $stats['size'];
 			return $this->size;
 		}
@@ -122,7 +118,7 @@ final class Stream implements StreamInterface {
 			throw new \RuntimeException('Stream is detached');
 		}
 
-		return feof($this->stream);
+		return \feof($this->stream);
 	}
 
 	public function tell(): int {
@@ -130,7 +126,7 @@ final class Stream implements StreamInterface {
 			throw new \RuntimeException('Stream is detached');
 		}
 
-		$result = ftell($this->stream);
+		$result = \ftell($this->stream);
 
 		if ($result === false) {
 			throw new \RuntimeException('Unable to determine stream position');
@@ -150,9 +146,9 @@ final class Stream implements StreamInterface {
 		if ($this->isSeekable() === false) {
 			throw new \RuntimeException('Stream is not seekable');
 		}
-		if (fseek($this->stream, $offset, $whence) === -1) {
+		if (\fseek($this->stream, $offset, $whence) === -1) {
 			throw new \RuntimeException('Unable to seek to stream position '
-				. $offset . ' with whence ' . var_export($whence, true));
+				. $offset . ' with whence ' . \var_export($whence, true));
 		}
 	}
 
@@ -188,7 +184,7 @@ final class Stream implements StreamInterface {
 		}
 
 		$this->size = null;
-		$bytes = fwrite($this->stream, $string);
+		$bytes = \fwrite($this->stream, $string);
 
 		if ($bytes === false) {
 			throw new \RuntimeException('Unable to write to stream');
@@ -201,7 +197,7 @@ final class Stream implements StreamInterface {
 		if ($this->stream === null) {
 			return dict[];
 		}
-		return dict(stream_get_meta_data($this->stream));
+		return dict(\stream_get_meta_data($this->stream));
 	}
 
 	public function __toString(): string {
