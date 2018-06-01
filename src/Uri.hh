@@ -2,7 +2,7 @@
 namespace Usox\HackTTP;
 
 use Facebook\Experimental\Http\Message\UriInterface;
-use HH\Lib\{C, Str};
+use HH\Lib\{C, Dict, Str};
 
 final class Uri implements UriInterface {
 
@@ -38,7 +38,9 @@ final class Uri implements UriInterface {
 
 	private ?string $path;
 
-	private ?string $query;
+	private ?string $raw_query;
+
+	private dict<string, string> $query = dict[];
 
 	private ?string $fragment;
 
@@ -63,8 +65,22 @@ final class Uri implements UriInterface {
 
 		$uri .= $this->path;
 
-		if ($this->query !== null) {
-			$uri .= '?'.$this->query;
+		if ($this->raw_query !== null) {
+			$uri .= '?'.$this->raw_query;
+		} elseif (C\count($this->query) > 0) {
+			$uri .= Str\format(
+				'?%s',
+				Dict\map_with_key(
+					$this->query,
+					($key, $value) ==> {
+						return Str\format(
+							'%s=%s',
+							\rawurlencode($key),
+							\rawurlencode($value)
+						);
+					}
+				) |> Str\join($$, '&')
+			);
 		}
 
 		if ($this->fragment !== null) {
@@ -125,7 +141,11 @@ final class Uri implements UriInterface {
 		return $this->path;
 	}
 
-	public function getQuery(): ?string {
+	public function getRawQuery(): ?string {
+		return $this->raw_query;
+	}
+
+	public function getQuery(): dict<string, string> {
 		return $this->query;
 	}
 
@@ -204,15 +224,26 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withQuery(?string  $query = null): this {
-		$query = $this->filterQueryAndFragment($query);
-
+	public function withQuery(dict<string, string> $query): this {
 		if ($this->query === $query) {
 			return $this;
 		}
 
 		$new = clone $this;
 		$new->query = $query;
+
+		return $new;
+	}
+
+	public function withRawQuery(string $raw_query): this {
+		$raw_query = $this->filterQueryAndFragment($raw_query);
+
+		if ($this->raw_query === $raw_query) {
+			return $this;
+		}
+
+		$new = clone $this;
+		$new->raw_query = $raw_query;
 
 		return $new;
 	}
@@ -248,7 +279,7 @@ final class Uri implements UriInterface {
 			$this->path = $this->filterPath((string) $parts['path']);
 		}
 		if (C\contains_key($parts, 'query')) {
-			$this->query = $this->filterQueryAndFragment((string) $parts['query']);
+			$this->raw_query = $this->filterQueryAndFragment((string) $parts['query']);
 		}
 		if (C\contains_key($parts, 'fragment')) {
 			$this->fragment = $this->filterQueryAndFragment((string) $parts['fragment']);

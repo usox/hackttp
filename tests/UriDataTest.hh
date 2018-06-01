@@ -127,7 +127,7 @@ class UriDataTest extends \PHPUnit_Framework_TestCase {
 	public function testUriComponentsGetEncodedProperly($input, $path, $query, $fragment, $output) {
 		$uri = new Uri($input);
 		$this->assertSame($path, $uri->getPath());
-		$this->assertSame($query, $uri->getQuery());
+		$this->assertSame($query, $uri->getRawQuery());
 		$this->assertSame($fragment, $uri->getFragment());
 		$this->assertSame($output, (string) $uri);
 	}
