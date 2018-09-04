@@ -13,9 +13,9 @@
 		}
 	],
 	"require": {
-		"hhvm": ">=3.24",
-		"hhvm/experimental-http-request-response-interfaces": "dev-master",
-		"hhvm/hsl": "^1.3"
+		"hhvm": ">=3.27",
+		"hhvm/experimental-http-request-response-interfaces": "dev-serverparams",
+		"hhvm/hsl": "^3.27.0"
 	},
 	"require-dev": {
 		"facebook/fbexpect": "^0.4.1",
@@ -27,6 +27,9 @@
 		}
 	},
 	"repositories": [
-		{ "type": "vcs", "url": "https://github.com/facebookexperimental/hack-http-request-response-interfaces" }
-	]
+		{ "type": "vcs", "url": "https://github.com/usox/hack-http-request-response-interfaces" }
+	],
+	"scripts": {
+		"tests": "env hhvm vendor/bin/phpunit"
+	}
 }
