@@ -18,7 +18,7 @@
 		"hhvm/hsl": "^3.27.0"
 	},
 	"require-dev": {
-		"facebook/fbexpect": "^0.4.1",
+		"facebook/fbexpect": "^1",
 		"phpunit/phpunit": "^5"
 	},
 	"autoload": {

@@ -9,6 +9,11 @@ php:
 
 before_script: composer install
 
+matrix:
+  allow_failures:
+  - php: hhvm-nightly
+
+
 script:
   - hh_server --check $(pwd)
   - vendor/bin/phpunit -c phpunit.xml.dist
