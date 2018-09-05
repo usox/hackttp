@@ -15,7 +15,8 @@
 	"require": {
 		"hhvm": ">=3.27",
 		"hhvm/experimental-http-request-response-interfaces": "dev-serverparams",
-		"hhvm/hsl": "^3.27.0"
+		"hhvm/hsl": "^3.27.0",
+		"hhvm/type-assert": "^3.2"
 	},
 	"require-dev": {
 		"facebook/fbexpect": "^1",
