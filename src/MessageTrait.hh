@@ -130,6 +130,7 @@ trait MessageTrait {
 
 	public function getBody(): StreamInterface {
 		if ($this->stream === null) {
+			// This is subject to change, maybe we use some kind of dummy stream
 			throw new \InvalidArgumentException('No body available');
 		}
 		return $this->stream;
