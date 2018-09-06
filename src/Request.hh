@@ -11,7 +11,7 @@ class Request implements Message\RequestInterface {
 
 	private Message\HTTPMethod $method;
 
-	private string $request_target = '';
+	private ?string $request_target;
 
     public function __construct(
         string $method,
@@ -20,8 +20,8 @@ class Request implements Message\RequestInterface {
         private ?Message\StreamInterface $body = null,
         private string $version = '1.1'
     ) {
-        $this->method = Message\HTTPMethod::assert(Str\lowercase($method));
-        //$this->setHeaders($headers);
+        $this->method = Message\HTTPMethod::assert(Str\uppercase($method));
+        $this->setHeaders($headers);
         $this->protocol = $version;
         if (!$this->hasHeader('Host')) {
             $this->updateHostFromUri();
@@ -37,8 +37,10 @@ class Request implements Message\RequestInterface {
         if ($target === '' || $target === null) {
             $target = '/';
         }
-        if ($this->uri->getQuery() != '') {
-            $target .= '?' . $this->uri->getRawQuery();
+
+        $raw_query = $this->uri->getRawQuery();
+        if ($raw_query != '') {
+            $target .= '?' . $raw_query;
         }
         return $target;
     }
@@ -85,9 +87,13 @@ class Request implements Message\RequestInterface {
         return $new;
     }
 
+    /**
+     * Updates the host header and ensure its position
+     * @see http://tools.ietf.org/html/rfc7230#section-5.4
+     */
     private function updateHostFromUri(): void{
         $host = $this->uri->getHost();
-        if ($host == '' || $host === null) {
+        if ($host === '' || $host === null) {
             return;
         }
         if (($port = $this->uri->getPort()) !== null) {
@@ -101,11 +107,9 @@ class Request implements Message\RequestInterface {
             $this->header_names['host'] = 'Host';
         }
 
-        // Ensure Host is the first header.
-        // See: http://tools.ietf.org/html/rfc7230#section-5.4
 		$this->headers = Dict\merge(
 			dict[$header => vec[$host]],
-			$this->headers
+			Dict\filter_keys($this->headers, ($key) ==> $key !== 'host')
 		);
     }
 }

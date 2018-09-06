@@ -145,4 +145,17 @@ trait MessageTrait {
 
 		return $new;
 	}
+
+	private function setHeaders(dict<string, vec<string>> $headers): void {
+		$this->header_names = dict[];
+		$this->headers = dict[];
+
+		foreach ($headers as $header => $value) {
+			$normalized = Str\lowercase($header);
+
+			$this->header_names[$normalized] = $header;
+			$this->headers[$header] =
+				Vec\map($value, ($header) ==> Str\trim($header, " \t"));
+		}
+	}
 }
