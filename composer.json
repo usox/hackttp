@@ -15,7 +15,8 @@
 	"require": {
 		"hhvm": ">=3.27",
 		"hhvm/experimental-http-request-response-interfaces": "dev-next",
-		"hhvm/hsl": "^3.27.0",
+		"hhvm/hsl": "dev-master",
+		"hhvm/hsl-experimental": "dev-master",
 		"hhvm/type-assert": "^3.2"
 	},
 	"require-dev": {
