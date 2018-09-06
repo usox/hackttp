@@ -14,10 +14,6 @@ final class ServerRequest extends Request implements Message\ServerRequestInterf
 
 	private dict<string, string> $post_body = dict[];
 
-    public function __construct(
-    ): void {
-    }
-
 	public function getServerParams(): Message\ServerParamInterface {
 		/* HH_FIXME[2050] Access to super global */
 		return new ServerParam($_SERVER);
