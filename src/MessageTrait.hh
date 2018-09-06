@@ -11,20 +11,20 @@ trait MessageTrait {
 
 	private dict<string, string> $header_names = dict[];
 
-	private string $protocol = '1.1';
+	private string $protocol_version = '1.1';
 
 	private ?StreamInterface $stream;
 
 	public function getProtocolVersion(): string {
-		return $this->protocol;
+		return $this->protocol_version;
 	}
 
 	public function withProtocolVersion(string $version): this {
-		if ($this->protocol === $version) {
+		if ($this->protocol_version === $version) {
 			return $this;
 		}
 		$new = clone $this;
-		$new->protocol = $version;
+		$new->protocol_version = $version;
 
 		return $new;
 	}

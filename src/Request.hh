@@ -16,13 +16,13 @@ class Request implements Message\RequestInterface {
     public function __construct(
         string $method,
         private Message\UriInterface $uri,
-        private dict<string, vec<string>> $headers = dict[],
-        private ?Message\StreamInterface $body = null,
-        private string $version = '1.1'
+        dict<string, vec<string>> $headers = dict[],
+        ?Message\StreamInterface $body = null,
+        string $version = '1.1'
     ) {
         $this->method = Message\HTTPMethod::assert(Str\uppercase($method));
         $this->setHeaders($headers);
-        $this->protocol = $version;
+        $this->protocol_version = $version;
         if (!$this->hasHeader('Host')) {
             $this->updateHostFromUri();
         }
