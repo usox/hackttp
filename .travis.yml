@@ -15,5 +15,4 @@ matrix:
 
 
 script:
-  - hh_server --check $(pwd)
-  - vendor/bin/phpunit -c phpunit.xml.dist
+  - composer run-script tests
