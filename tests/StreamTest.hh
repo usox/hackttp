@@ -225,6 +225,6 @@ class StreamTest extends \Facebook\HackTest\HackTestCase {
 	}
 }
 
-function fread(resource $handle, int $length): mixed {
+function fread(?resource $handle, int $length): mixed {
 	return StreamTest::$has_fread_error ? false : \fread($handle, $length);
 }

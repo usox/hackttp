@@ -172,7 +172,7 @@ final class Stream implements StreamInterface {
 			throw new \RuntimeException('Unable to read from stream');
 		}
 
-		return $content;
+		return (string) $content;
 	}
 
 	public function write(string $string): int {
