@@ -20,9 +20,8 @@
 		"hhvm/type-assert": "^3.2"
 	},
 	"require-dev": {
-		"facebook/fbexpect": "^1",
-		"phpunit/phpunit": "^5",
-		"hhvm/hacktest": "^0",
+		"facebook/fbexpect": "^2",
+		"hhvm/hacktest": "^0.2",
 		"usox/hackmock": "^0"
 	},
 	"autoload": {
@@ -34,6 +33,6 @@
 		{ "type": "vcs", "url": "https://github.com/usox/hack-http-request-response-interfaces" }
 	],
 	"scripts": {
-		"tests": "env hhvm vendor/bin/phpunit"
+		"tests": "env hhvm vendor/bin/hacktest tests"
 	}
 }

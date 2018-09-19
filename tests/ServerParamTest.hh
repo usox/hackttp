@@ -1,10 +1,11 @@
-<?hh // partial
+<?hh // strict
 
 namespace Usox\HackTTP;
 
 use type Facebook\Experimental\Http\Message\HTTPMethod;
+use function Facebook\FBExpect\expect;
 
-class ServerParamTest extends \PHPUnit_Framework_TestCase {
+class ServerParamTest extends \Facebook\HackTest\HackTestCase {
 
     private dict<string, mixed> $server_params = dict[
         'PHP_SELF' => 'php_self',
@@ -20,10 +21,9 @@ class ServerParamTest extends \PHPUnit_Framework_TestCase {
     ): void {
         $instance = new ServerParam(dict[$key => $content]);
 
-        $this->assertSame(
-            $content,
-            \call_user_func_array([$instance, $method_name], []),
-        );
+        expect(
+            \call_user_func_array([$instance, $method_name], [])
+        )->toBeSame($content);
     }
 
     /**
@@ -39,81 +39,74 @@ class ServerParamTest extends \PHPUnit_Framework_TestCase {
         \call_user_func_array([$instance, $method_name], []);
     }
 
-    public function serverParamProvider() {
-        return [
-            ['getPhpSelf', 'PHP_SELF', 'php_self'],
-            ['getArgC', 'argc', 666],
-            [
+    public function serverParamProvider(): vec<vec<mixed>> {
+        return vec[
+            vec['getPhpSelf', 'PHP_SELF', 'php_self'],
+            vec['getArgC', 'argc', 666],
+            vec[
                 'getGatewayInterface',
                 'GATEWAY_INTERFACE',
                 'some-gateway-interface',
             ],
-            ['getContentLength', 'CONTENT_LENGTH', 33],
-            ['getContentType', 'CONTENT_TYPE', 'some-content-type'],
-            ['getServerAddr', 'SERVER_ADDR', 'some-server-address'],
-            ['getServerName', 'SERVER_NAME', 'some-sever-name'],
-            ['getServerSoftware', 'SERVER_SOFTWARE', 'some-server-software'],
-            ['getServerProtocol', 'SERVER_PROTOCOL', 'some-server-protocol'],
-            ['getRequestTime', 'REQUEST_TIME', \time()],
-            ['getRequestTimeFloat', 'REQUEST_TIME_FLOAT', \microtime(true)],
-            ['getQueryString', 'QUERY_STRING', 'some-query-string'],
-            ['getDocumentRoot', 'DOCUMENT_ROOT', 'some-document-root'],
-            ['getHttpAccept', 'HTTP_ACCEPT', 'some-http-accept'],
-            ['getHttpAcceptCharset', 'HTTP_ACCEPT_CHARSET', 'some-http-accept-charset'],
-            ['getHttpAcceptEncoding', 'HTTP_ACCEPT_ENCODING', 'some-http-accept-enconding'],
-            ['getHttpAcceptLanguage', 'HTTP_ACCEPT_LANGUAGE', 'some-http-accept-language'],
-            ['getHttpConnection', 'HTTP_CONNECTION', 'some-http-connection'],
-            ['getHttpHost', 'HTTP_HOST', 'some-http-host'],
-            ['getHttpReferer', 'HTTP_REFERER', 'some-http-referer'],
-            ['getHttpUserAgent', 'HTTP_USER_AGENT', 'some-http-user-agent'],
-            ['getHttps', 'HTTPS', 'some-https'],
-            ['getRemoteAddr', 'REMOTE_ADDR', 'some-remote-addr'],
-            ['getRemoteHost', 'REMOTE_HOST', 'some-remote-host'],
-            ['getRemotePort', 'REMOTE_PORT', 666],
-            ['getRemoteUser', 'REMOTE_USER', 'some-remote-user'],
-            ['getRedirectRemoteUser', 'REDIRECT_REMOTE_USER', 'some-redirect-remote-user'],
-            ['getScriptFilename', 'SCRIPT_FILENAME', 'some-script-filename'],
-            ['getServerAdmin', 'SERVER_ADMIN', 'some-server-admin'],
-            ['getServerPort', 'SERVER_PORT', 42],
-            ['getServerSignature', 'SERVER_SIGNATURE', 'some-server-signature'],
-            ['getPathTranslated', 'PATH_TRANSLATED', 'some-path-translated'],
-            ['getScriptName', 'SCRIPT_NAME', 'some-script-name'],
-            ['getRequestUri', 'REQUEST_URI', 'some-request-uri'],
-            ['getPhpAuthDigest', 'PHP_AUTH_DIGEST', 'some-php-auth-digest'],
-            ['getPhpAuthUser', 'PHP_AUTH_USER', 'some-php-auth-user'],
-            ['getPhpAuthPw', 'PHP_AUTH_PW', 'some-php-auth-pw'],
-            ['getAuthType', 'AUTH_TYPE', 'some-auth-type'],
-            ['getPathInfo', 'PATH_INFO', 'some-path-info'],
-            ['getOrigPathInfo', 'ORIG_PATH_INFO', 'some-orig-path-info'],
+            vec['getContentLength', 'CONTENT_LENGTH', 33],
+            vec['getContentType', 'CONTENT_TYPE', 'some-content-type'],
+            vec['getServerAddr', 'SERVER_ADDR', 'some-server-address'],
+            vec['getServerName', 'SERVER_NAME', 'some-sever-name'],
+            vec['getServerSoftware', 'SERVER_SOFTWARE', 'some-server-software'],
+            vec['getServerProtocol', 'SERVER_PROTOCOL', 'some-server-protocol'],
+            vec['getRequestTime', 'REQUEST_TIME', \time()],
+            vec['getRequestTimeFloat', 'REQUEST_TIME_FLOAT', \microtime(true)],
+            vec['getQueryString', 'QUERY_STRING', 'some-query-string'],
+            vec['getDocumentRoot', 'DOCUMENT_ROOT', 'some-document-root'],
+            vec['getHttpAccept', 'HTTP_ACCEPT', 'some-http-accept'],
+            vec['getHttpAcceptCharset', 'HTTP_ACCEPT_CHARSET', 'some-http-accept-charset'],
+            vec['getHttpAcceptEncoding', 'HTTP_ACCEPT_ENCODING', 'some-http-accept-enconding'],
+            vec['getHttpAcceptLanguage', 'HTTP_ACCEPT_LANGUAGE', 'some-http-accept-language'],
+            vec['getHttpConnection', 'HTTP_CONNECTION', 'some-http-connection'],
+            vec['getHttpHost', 'HTTP_HOST', 'some-http-host'],
+            vec['getHttpReferer', 'HTTP_REFERER', 'some-http-referer'],
+            vec['getHttpUserAgent', 'HTTP_USER_AGENT', 'some-http-user-agent'],
+            vec['getHttps', 'HTTPS', 'some-https'],
+            vec['getRemoteAddr', 'REMOTE_ADDR', 'some-remote-addr'],
+            vec['getRemoteHost', 'REMOTE_HOST', 'some-remote-host'],
+            vec['getRemotePort', 'REMOTE_PORT', 666],
+            vec['getRemoteUser', 'REMOTE_USER', 'some-remote-user'],
+            vec['getRedirectRemoteUser', 'REDIRECT_REMOTE_USER', 'some-redirect-remote-user'],
+            vec['getScriptFilename', 'SCRIPT_FILENAME', 'some-script-filename'],
+            vec['getServerAdmin', 'SERVER_ADMIN', 'some-server-admin'],
+            vec['getServerPort', 'SERVER_PORT', 42],
+            vec['getServerSignature', 'SERVER_SIGNATURE', 'some-server-signature'],
+            vec['getPathTranslated', 'PATH_TRANSLATED', 'some-path-translated'],
+            vec['getScriptName', 'SCRIPT_NAME', 'some-script-name'],
+            vec['getRequestUri', 'REQUEST_URI', 'some-request-uri'],
+            vec['getPhpAuthDigest', 'PHP_AUTH_DIGEST', 'some-php-auth-digest'],
+            vec['getPhpAuthUser', 'PHP_AUTH_USER', 'some-php-auth-user'],
+            vec['getPhpAuthPw', 'PHP_AUTH_PW', 'some-php-auth-pw'],
+            vec['getAuthType', 'AUTH_TYPE', 'some-auth-type'],
+            vec['getPathInfo', 'PATH_INFO', 'some-path-info'],
+            vec['getOrigPathInfo', 'ORIG_PATH_INFO', 'some-orig-path-info'],
         ];
     }
 
-    public function testGetArgvReturnsVector() {
+    public function testGetArgvReturnsVector(): void {
         $data = ['some-value'];
 
         $instance = new ServerParam(dict['argv' => $data]);
 
-        $this->assertSame(
-            vec($data),
-            $instance->getArgV()
-        );
+        expect($instance->getArgV())->toBeSame(vec($data));
     }
 
-    public function testGetRequestMethodReturnsMethod() {
+    public function testGetRequestMethodReturnsMethod(): void {
         $instance = new ServerParam(dict['REQUEST_METHOD' => HTTPMethod::GET]);
 
-        $this->assertSame(
-            HTTPMethod::GET,
-            $instance->getRequestMethod()
-        );
+        expect($instance->getRequestMethod())->toBeSame(HTTPMethod::GET);
     }
 
-    public function testGetRequestMethodFailsWithMissingKey() {
-        $this->expectException(
-            \UnexpectedValueException::class
-        );
+    public function testGetRequestMethodFailsWithMissingKey(): void {
         $instance = new ServerParam(dict[]);
 
-        $instance->getRequestMethod();
+        expect(
+            () ==> $instance->getRequestMethod()
+        )->toThrow(\UnexpectedValueException::class);
     }
 }
