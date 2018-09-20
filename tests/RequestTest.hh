@@ -3,12 +3,12 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use type Facebook\HackTest\HackTestCase;
+use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
 use namespace HH\Lib\{Str, Vec};
 use function Usox\HackMock\{mock, prospect};
 
-class RequestTest extends HackTestCase {
+class RequestTest extends HackTest {
 
 	public function testGetRequestTargetReturnsTargetFromUri(): void {
 		$uri = mock(Message\UriInterface::class);

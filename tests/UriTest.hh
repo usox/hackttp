@@ -4,7 +4,7 @@ namespace Usox\HackTTP;
 
 use function Facebook\FBExpect\expect;
 
-class UriTest extends \Facebook\HackTest\HackTestCase {
+class UriTest extends \Facebook\HackTest\HackTest {
 
 	public function testParsesProvidedUri(): void {
 		$orig_uri = 'https://user:pass@example.com:8080/path/123?q=abc#test';

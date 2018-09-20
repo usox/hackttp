@@ -21,7 +21,7 @@
 	},
 	"require-dev": {
 		"facebook/fbexpect": "^2",
-		"hhvm/hacktest": "^0.2",
+		"hhvm/hacktest": "dev-master",
 		"usox/hackmock": "^0"
 	},
 	"autoload": {

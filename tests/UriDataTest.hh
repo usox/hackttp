@@ -4,11 +4,9 @@ namespace Usox\HackTTP;
 use function Facebook\FBExpect\expect;
 use namespace HH\Lib\{Str};
 
-class UriDataTest extends \Facebook\HackTest\HackTestCase {
+class UriDataTest extends \Facebook\HackTest\HackTest {
 
-	/**
-	 * @dataProvider getValidUris
-	 */
+	<<DataProvider('getValidUris')>>
 	public function testValidUrisStayValid(string $input): void {
 		$uri = new Uri($input);
 
@@ -17,9 +15,7 @@ class UriDataTest extends \Facebook\HackTest\HackTestCase {
 		)->toBeSame($input);
 	}
 
-	/**
-	 * @dataProvider getValidUris
-	 */
+	<<DataProvider('getValidUris')>>
 	public function testFromParts(string $input): void {
 		$uri = new Uri($input);
 
@@ -56,9 +52,7 @@ class UriDataTest extends \Facebook\HackTest\HackTestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider getInvalidUris
-	 */
+	<<DataProvider('getInvalidUris')>>
 	public function testInvalidUrisThrowException(string $invalidUri): void {
 		expect(
 			() ==> new Uri($invalidUri)
@@ -79,9 +73,7 @@ class UriDataTest extends \Facebook\HackTest\HackTestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider getPortTestCases
-	 */
+	<<DataProvider('getPortTestCases')>>
 	public function testIsDefaultPort(
 		string $scheme,
 		int $port,
@@ -138,9 +130,7 @@ class UriDataTest extends \Facebook\HackTest\HackTestCase {
 		];
 	}
 
-	/**
-	 * @dataProvider uriComponentsEncodingProvider
-	 */
+	<<DataProvider('uriComponentsEncodingProvider')>>
 	public function testUriComponentsGetEncodedProperly(
 		string $input,
 		string $path,

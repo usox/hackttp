@@ -4,7 +4,7 @@ namespace Usox\HackTTP;
 use function Facebook\FBExpect\expect;
 use namespace HH\Lib\Str;
 
-class StreamTest extends \Facebook\HackTest\HackTestCase {
+class StreamTest extends \Facebook\HackTest\HackTest {
 	public static bool $has_fread_error = false;
 
 	public function testConstructorInitializesProperties(): void {

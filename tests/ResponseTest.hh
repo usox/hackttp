@@ -3,12 +3,12 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use type Facebook\HackTest\HackTestCase;
+use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
 use namespace HH\Lib\{Str, Vec};
 use function Usox\HackMock\{mock, prospect};
 
-class ResponseTest extends HackTestCase {
+class ResponseTest extends HackTest {
 
 	public function testGetStatusCodeReturnsCode(): void {
 		$code = 666;

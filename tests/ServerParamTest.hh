@@ -5,15 +5,13 @@ namespace Usox\HackTTP;
 use type Facebook\Experimental\Http\Message\HTTPMethod;
 use function Facebook\FBExpect\expect;
 
-class ServerParamTest extends \Facebook\HackTest\HackTestCase {
+class ServerParamTest extends \Facebook\HackTest\HackTest {
 
     private dict<string, mixed> $server_params = dict[
         'PHP_SELF' => 'php_self',
     ];
 
-    /**
-     * @dataProvider serverParamProvider
-     */
+    <<DataProvider('serverParamProvider')>>
     public function testServerParams(
         string $method_name,
         string $key,
@@ -26,9 +24,7 @@ class ServerParamTest extends \Facebook\HackTest\HackTestCase {
         )->toBeSame($content);
     }
 
-    /**
-     * @dataProvider serverParamProvider
-     */
+    <<DataProvider('serverParamProvider')>>
     public function testServerParamsWontFailCauseOfMissingKeys(
         string $method_name,
         string $key,

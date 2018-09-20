@@ -3,12 +3,12 @@
 namespace Usox\HackTTP;
 
 use type Facebook\Experimental\Http\Message\StreamInterface;
-use type Facebook\HackTest\HackTestCase;
+use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
 use namespace HH\Lib\{Str, Vec};
 use function Usox\HackMock\mock;
 
-class MessageTraitTest extends HackTestCase {
+class MessageTraitTest extends HackTest {
 
 	public function testGetProtocolReturnsDefaultProtocolVersion(): void {
 		expect(
