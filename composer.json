@@ -13,16 +13,15 @@
 		}
 	],
 	"require": {
-		"hhvm": ">=3.27",
+		"hhvm": ">=3.28",
 		"hhvm/experimental-http-request-response-interfaces": "dev-next",
 		"hhvm/hsl": "dev-master",
 		"hhvm/hsl-experimental": "dev-master",
 		"hhvm/type-assert": "^3.2"
 	},
 	"require-dev": {
-		"facebook/fbexpect": "^2",
-		"hhvm/hacktest": "dev-master",
-		"usox/hackmock": "^0"
+		"usox/hackmock": "dev-master",
+		"hhvm/hhast": "^3.28"
 	},
 	"autoload": {
 		"psr-4": {
