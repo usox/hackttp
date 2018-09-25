@@ -20,7 +20,7 @@
 		"hhvm/type-assert": "^3.2"
 	},
 	"require-dev": {
-		"usox/hackmock": "dev-master",
+		"usox/hackmock": "^1",
 		"hhvm/hhast": "^3.28"
 	},
 	"autoload": {
