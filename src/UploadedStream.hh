@@ -5,7 +5,7 @@ namespace Usox\HackTTP;
 use namespace Facebook\Experimental\Http\Message;
 use namespace HH\Lib\{C, Experimental\Filesystem, Str};
 
-final class UploadedFile implements Message\UploadedFileInterface {
+final class UploadedStream implements Message\UploadedFileInterface {
 
 	private static vec<int> $errors = vec[
 		\UPLOAD_ERR_OK,
