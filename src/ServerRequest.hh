@@ -10,7 +10,7 @@ final class ServerRequest
 
 	private dict<string, string> $cookie_params = dict[];
 
-	private mixed $uploaded_files;
+	private vec<Message\UploadedFileInterface> $uploaded_files = vec[];
 
 	private mixed $query_params;
 
@@ -45,12 +45,11 @@ final class ServerRequest
 		return $server_request;
 	}
 
-	public function getUploadedFiles(): mixed {
-		// TBD
+	public function getUploadedFiles(): vec<Message\UploadedFileInterface> {
 		return $this->uploaded_files;
 	}
 
-	public function withUploadedFiles(mixed $uploaded_files): this {
+	public function withUploadedFiles(vec<Message\UploadedFileInterface> $uploaded_files): this {
 		$server_request = clone $this;
 		$server_request->uploaded_files = $uploaded_files;
 
