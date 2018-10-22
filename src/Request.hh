@@ -7,18 +7,18 @@ use namespace HH\Lib\{C, Dict, Str};
 
 class Request implements Message\RequestInterface {
 
-	use MessageTrait;
+    use MessageTrait;
 
-	private Message\HTTPMethod $method;
+    private Message\HTTPMethod $method;
 
-	private ?string $request_target;
+    private ?string $request_target;
 
     public function __construct(
         string $method,
         private Message\UriInterface $uri,
         dict<string, vec<string>> $headers = dict[],
         ?Message\StreamInterface $body = null,
-        string $version = '1.1'
+        string $version = '1.1',
     ) {
         $this->method = Message\HTTPMethod::assert(Str\uppercase($method));
         $this->setHeaders($headers);
@@ -26,7 +26,7 @@ class Request implements Message\RequestInterface {
         if (!$this->hasHeader('Host')) {
             $this->updateHostFromUri();
         }
-		$this->stream = $body;
+        $this->stream = $body;
     }
 
     public function getRequestTarget(): string {
@@ -40,7 +40,7 @@ class Request implements Message\RequestInterface {
 
         $raw_query = $this->uri->getRawQuery();
         if ($raw_query != '') {
-            $target .= '?' . $raw_query;
+            $target .= '?'.$raw_query;
         }
         return $target;
     }
@@ -48,7 +48,7 @@ class Request implements Message\RequestInterface {
     public function withRequestTarget(string $request_target): this {
         if (\preg_match('#\s#', $request_target)) {
             throw new \InvalidArgumentException(
-                'Invalid request target provided; must not contain whitespace'
+                'Invalid request target provided; must not contain whitespace',
             );
         }
         $new = clone $this;
@@ -73,15 +73,15 @@ class Request implements Message\RequestInterface {
     }
 
     public function withUri(
-		Message\UriInterface $uri,
-		Message\RequestURIOptions $options = shape('preserveHost' => false)
-	): this {
+        Message\UriInterface $uri,
+        Message\RequestURIOptions $options = shape('preserveHost' => false),
+    ): this {
         if ($uri === $this->uri) {
             return $this;
         }
         $new = clone $this;
         $new->uri = $uri;
-		if ($options['preserveHost'] === false) {
+        if ($options['preserveHost'] === false) {
             $new->updateHostFromUri();
         }
         return $new;
@@ -91,25 +91,25 @@ class Request implements Message\RequestInterface {
      * Updates the host header and ensure its position
      * @see http://tools.ietf.org/html/rfc7230#section-5.4
      */
-    private function updateHostFromUri(): void{
+    private function updateHostFromUri(): void {
         $host = $this->uri->getHost();
         if ($host === '' || $host === null) {
             return;
         }
         if (($port = $this->uri->getPort()) !== null) {
-            $host .= ':' . $port;
+            $host .= ':'.$port;
         }
 
-		if (C\contains_key($this->header_names, 'host')) {
+        if (C\contains_key($this->header_names, 'host')) {
             $header = $this->header_names['host'];
         } else {
             $header = 'Host';
             $this->header_names['host'] = 'Host';
         }
 
-		$this->headers = Dict\merge(
-			dict[$header => vec[$host]],
-			Dict\filter_keys($this->headers, ($key) ==> $key !== 'host')
-		);
+        $this->headers = Dict\merge(
+            dict[$header => vec[$host]],
+            Dict\filter_keys($this->headers, ($key) ==> $key !== 'host'),
+        );
     }
 }

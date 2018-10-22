@@ -1,4 +1,5 @@
 <?hh // strict
+
 namespace Usox\HackTTP;
 
 use Facebook\Experimental\Http\Message\UriInterface;
@@ -9,7 +10,7 @@ final class Uri implements UriInterface {
 	const HTTP_DEFAULT_HOST = 'localhost';
 
 	private static dict<string, int> $default_ports = dict[
-		'http'  => 80,
+		'http' => 80,
 		'https' => 443,
 		'ftp' => 21,
 		'gopher' => 70,
@@ -60,7 +61,7 @@ final class Uri implements UriInterface {
 		$authority = $this->getAuthority();
 
 		if ($authority !== '' || $this->scheme === 'file') {
-			$uri .= '//' . $authority;
+			$uri .= '//'.$authority;
 		}
 
 		$uri .= $this->path;
@@ -76,10 +77,11 @@ final class Uri implements UriInterface {
 						return Str\format(
 							'%s=%s',
 							\rawurlencode($key),
-							\rawurlencode($value)
+							\rawurlencode($value),
 						);
-					}
-				) |> Str\join($$, '&')
+					},
+				)
+					|> Str\join($$, '&'),
 			);
 		}
 
@@ -95,7 +97,7 @@ final class Uri implements UriInterface {
 	}
 
 	public function getAuthority(): string {
-		$authority = (string) $this->host;
+		$authority = (string)$this->host;
 
 		$user_info = '';
 		if ($this->user_name !== null && $this->user_name !== '') {
@@ -105,11 +107,7 @@ final class Uri implements UriInterface {
 				$user_info .= Str\format(':%s', $this->user_password);
 			}
 
-			$authority = Str\format(
-				'%s@%s',
-				$user_info,
-				$authority
-			);
+			$authority = Str\format('%s@%s', $user_info, $authority);
 		}
 
 		if ($this->port !== null) {
@@ -124,8 +122,8 @@ final class Uri implements UriInterface {
 			return null;
 		}
 		return shape(
-			'user' => (string) $this->user_name,
-			'pass' => $this->user_password
+			'user' => (string)$this->user_name,
+			'pass' => $this->user_password,
 		);
 	}
 
@@ -133,11 +131,11 @@ final class Uri implements UriInterface {
 		return $this->host;
 	}
 
-	public function getPort(): ?int	{
+	public function getPort(): ?int {
 		return $this->port;
 	}
 
-	public function getPath(): ?string{
+	public function getPath(): ?string {
 		return $this->path;
 	}
 
@@ -168,7 +166,10 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withUserInfo(?string $user, ?string $password = null): this {
+	public function withUserInfo(
+		?string $user,
+		?string $password = null,
+	): this {
 		if ($this->user_name === $user && $this->user_password === $password) {
 			return $this;
 		}
@@ -267,28 +268,30 @@ final class Uri implements UriInterface {
 			throw new \InvalidArgumentException("Unable to parse URI: $uri");
 		}
 		if (C\contains_key($parts, 'scheme')) {
-			$this->scheme = $this->filterScheme((string) $parts['scheme']);
+			$this->scheme = $this->filterScheme((string)$parts['scheme']);
 		}
 		if (C\contains_key($parts, 'host')) {
-			$this->host = $this->filterHost((string) $parts['host']);
+			$this->host = $this->filterHost((string)$parts['host']);
 		}
 		if (C\contains_key($parts, 'port') && $parts['port'] !== null) {
-			$this->port = $this->filterPort((int) $parts['port']);
+			$this->port = $this->filterPort((int)$parts['port']);
 		}
 		if (C\contains_key($parts, 'path')) {
-			$this->path = $this->filterPath((string) $parts['path']);
+			$this->path = $this->filterPath((string)$parts['path']);
 		}
 		if (C\contains_key($parts, 'query')) {
-			$this->raw_query = $this->filterQueryAndFragment((string) $parts['query']);
+			$this->raw_query =
+				$this->filterQueryAndFragment((string)$parts['query']);
 		}
 		if (C\contains_key($parts, 'fragment')) {
-			$this->fragment = $this->filterQueryAndFragment((string) $parts['fragment']);
+			$this->fragment =
+				$this->filterQueryAndFragment((string)$parts['fragment']);
 		}
 		if (C\contains_key($parts, 'user')) {
-			$this->user_name = (string) $parts['user'];
+			$this->user_name = (string)$parts['user'];
 		}
 		if (C\contains_key($parts, 'pass')) {
-			$this->user_password = (string) $parts['pass'];
+			$this->user_password = (string)$parts['pass'];
 		}
 
 		$this->removeDefaultPort();
@@ -317,7 +320,11 @@ final class Uri implements UriInterface {
 
 		if (1 > $port || $max_port < $port) {
 			throw new \InvalidArgumentException(
-				Str\format('Invalid port: %d. Must be between 1 and %d', $port, $max_port)
+				Str\format(
+					'Invalid port: %d. Must be between 1 and %d',
+					$port,
+					$max_port,
+				),
 			);
 		}
 		return $port;
@@ -326,7 +333,8 @@ final class Uri implements UriInterface {
 	private function removeDefaultPort(): void {
 		if (
 			$this->port !== null &&
-			C\contains_key(static::$default_ports, (string) $this->scheme) && $this->port === static::$default_ports[(string) $this->scheme]
+			C\contains_key(static::$default_ports, (string)$this->scheme) &&
+			$this->port === static::$default_ports[(string)$this->scheme]
 		) {
 			$this->port = null;
 		}
@@ -337,11 +345,14 @@ final class Uri implements UriInterface {
 			return null;
 		}
 		return \preg_replace_callback(
-			'/(?:[^' . static::$char_unreserved . static::$char_sub_delimeters . '%:@\/]++|%(?![A-Fa-f0-9]{2}))/',
-			function ($match) {
+			'/(?:[^'.
+			static::$char_unreserved.
+			static::$char_sub_delimeters.
+			'%:@\/]++|%(?![A-Fa-f0-9]{2}))/',
+			function($match) {
 				return \rawurlencode($match[0]);
 			},
-			$path
+			$path,
 		);
 	}
 
@@ -350,29 +361,44 @@ final class Uri implements UriInterface {
 			return null;
 		}
 		return \preg_replace_callback(
-			'/(?:[^' . static::$char_unreserved . static::$char_sub_delimeters . '%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/',
-			function ($match) {
+			'/(?:[^'.
+			static::$char_unreserved.
+			static::$char_sub_delimeters.
+			'%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/',
+			function($match) {
 				return \rawurlencode($match[0]);
 			},
-			$str
+			$str,
 		);
 	}
 
 	private function validateState(): void {
-		if ($this->host === null && ($this->scheme === 'http' || $this->scheme === 'https')) {
+		if (
+			$this->host === null &&
+			($this->scheme === 'http' || $this->scheme === 'https')
+		) {
 			$this->host = static::HTTP_DEFAULT_HOST;
 		}
-		$path = (string) $this->path;
+		$path = (string)$this->path;
 
 		if ($this->getAuthority() === '') {
 			if (0 === Str\search($path, '//')) {
-				throw new \InvalidArgumentException('The path of a URI without an authority must not start with two slashes "//"');
+				throw new \InvalidArgumentException(
+					'The path of a URI without an authority must not start with two slashes "//"',
+				);
 			}
-			if ($this->scheme === null && null !== Str\search(\explode('/', $path, 2)[0], ':')) {
-				throw new \InvalidArgumentException('A relative URI must not have a path beginning with a segment containing a colon');
+			if (
+				$this->scheme === null &&
+				null !== Str\search(\explode('/', $path, 2)[0], ':')
+			) {
+				throw new \InvalidArgumentException(
+					'A relative URI must not have a path beginning with a segment containing a colon',
+				);
 			}
 		} elseif ($path !== '' && Str\search($path, '/') !== 0) {
-			throw new \InvalidArgumentException('The path of a URI with an authority must start with a slash "/" or be empty');
+			throw new \InvalidArgumentException(
+				'The path of a URI with an authority must start with a slash "/" or be empty',
+			);
 		}
 	}
 }

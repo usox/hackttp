@@ -4,7 +4,9 @@ namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
 
-final class ServerRequest extends Request implements Message\ServerRequestInterface {
+final class ServerRequest
+	extends Request
+	implements Message\ServerRequestInterface {
 
 	private dict<string, string> $cookie_params = dict[];
 
@@ -60,7 +62,8 @@ final class ServerRequest extends Request implements Message\ServerRequestInterf
 		if (
 			$server_params->getRequestMethod() === Message\HTTPMethod::POST &&
 			(
-				$server_params->getContentType() === 'application/x-www-form-urlencoded' ||
+				$server_params->getContentType() ===
+					'application/x-www-form-urlencoded' ||
 				$server_params->getContentType() === 'multipart/form-data'
 			)
 		) {

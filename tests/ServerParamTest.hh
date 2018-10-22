@@ -19,9 +19,9 @@ class ServerParamTest extends \Facebook\HackTest\HackTest {
     ): void {
         $instance = new ServerParam(dict[$key => $content]);
 
-        expect(
-            \call_user_func_array([$instance, $method_name], [])
-        )->toBeSame($content);
+        expect(\call_user_func_array([$instance, $method_name], []))->toBeSame(
+            $content,
+        );
     }
 
     <<DataProvider('serverParamProvider')>>
@@ -55,9 +55,21 @@ class ServerParamTest extends \Facebook\HackTest\HackTest {
             vec['getQueryString', 'QUERY_STRING', 'some-query-string'],
             vec['getDocumentRoot', 'DOCUMENT_ROOT', 'some-document-root'],
             vec['getHttpAccept', 'HTTP_ACCEPT', 'some-http-accept'],
-            vec['getHttpAcceptCharset', 'HTTP_ACCEPT_CHARSET', 'some-http-accept-charset'],
-            vec['getHttpAcceptEncoding', 'HTTP_ACCEPT_ENCODING', 'some-http-accept-enconding'],
-            vec['getHttpAcceptLanguage', 'HTTP_ACCEPT_LANGUAGE', 'some-http-accept-language'],
+            vec[
+                'getHttpAcceptCharset',
+                'HTTP_ACCEPT_CHARSET',
+                'some-http-accept-charset',
+            ],
+            vec[
+                'getHttpAcceptEncoding',
+                'HTTP_ACCEPT_ENCODING',
+                'some-http-accept-enconding',
+            ],
+            vec[
+                'getHttpAcceptLanguage',
+                'HTTP_ACCEPT_LANGUAGE',
+                'some-http-accept-language',
+            ],
             vec['getHttpConnection', 'HTTP_CONNECTION', 'some-http-connection'],
             vec['getHttpHost', 'HTTP_HOST', 'some-http-host'],
             vec['getHttpReferer', 'HTTP_REFERER', 'some-http-referer'],
@@ -67,11 +79,19 @@ class ServerParamTest extends \Facebook\HackTest\HackTest {
             vec['getRemoteHost', 'REMOTE_HOST', 'some-remote-host'],
             vec['getRemotePort', 'REMOTE_PORT', 666],
             vec['getRemoteUser', 'REMOTE_USER', 'some-remote-user'],
-            vec['getRedirectRemoteUser', 'REDIRECT_REMOTE_USER', 'some-redirect-remote-user'],
+            vec[
+                'getRedirectRemoteUser',
+                'REDIRECT_REMOTE_USER',
+                'some-redirect-remote-user',
+            ],
             vec['getScriptFilename', 'SCRIPT_FILENAME', 'some-script-filename'],
             vec['getServerAdmin', 'SERVER_ADMIN', 'some-server-admin'],
             vec['getServerPort', 'SERVER_PORT', 42],
-            vec['getServerSignature', 'SERVER_SIGNATURE', 'some-server-signature'],
+            vec[
+                'getServerSignature',
+                'SERVER_SIGNATURE',
+                'some-server-signature',
+            ],
             vec['getPathTranslated', 'PATH_TRANSLATED', 'some-path-translated'],
             vec['getScriptName', 'SCRIPT_NAME', 'some-script-name'],
             vec['getRequestUri', 'REQUEST_URI', 'some-request-uri'],
@@ -101,8 +121,8 @@ class ServerParamTest extends \Facebook\HackTest\HackTest {
     public function testGetRequestMethodFailsWithMissingKey(): void {
         $instance = new ServerParam(dict[]);
 
-        expect(
-            () ==> $instance->getRequestMethod()
-        )->toThrow(\UnexpectedValueException::class);
+        expect(() ==> $instance->getRequestMethod())->toThrow(
+            \UnexpectedValueException::class,
+        );
     }
 }

@@ -7,10 +7,10 @@ use namespace HH\Lib\C;
 
 class Response implements Message\ResponseInterface {
 
-	use MessageTrait;
+    use MessageTrait;
 
     private static dict<int, string> $phrases = dict[
-    	100 => 'Continue',
+        100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
         200 => 'OK',
@@ -70,42 +70,42 @@ class Response implements Message\ResponseInterface {
         511 => 'Network Authentication Required',
     ];
 
-	private string $reason_phrase = '';
+    private string $reason_phrase = '';
 
-	public function __construct(
-		private int $status_code = 200,
-		dict<string, vec<string>> $headers = dict[],
-		?Message\StreamInterface $body = null,
-		private string $protocol_version = '1.1',
-		string $reason = '',
-	) {
-		$this->stream = $body;
+    public function __construct(
+        private int $status_code = 200,
+        dict<string, vec<string>> $headers = dict[],
+        ?Message\StreamInterface $body = null,
+        private string $protocol_version = '1.1',
+        string $reason = '',
+    ) {
+        $this->stream = $body;
 
-		$this->setHeaders($headers);
+        $this->setHeaders($headers);
 
-		$this->reason_phrase = $this->getReason($status_code, $reason);
-	}
+        $this->reason_phrase = $this->getReason($status_code, $reason);
+    }
 
-	public function getStatusCode(): int {
-		return $this->status_code;
-	}
+    public function getStatusCode(): int {
+        return $this->status_code;
+    }
 
-	public function getReasonPhrase(): string {
-		return $this->reason_phrase;
-	}
+    public function getReasonPhrase(): string {
+        return $this->reason_phrase;
+    }
 
-	public function withStatus(int $code, string $reason_phrase = ''): this {
-		$new = clone $this;
-		$new->status_code = $code;
-		$new->reason_phrase = $this->getReason($code, $reason_phrase);
+    public function withStatus(int $code, string $reason_phrase = ''): this {
+        $new = clone $this;
+        $new->status_code = $code;
+        $new->reason_phrase = $this->getReason($code, $reason_phrase);
 
-		return $new;
-	}
+        return $new;
+    }
 
-	private function getReason(int $code, string $reason_phrase): string {
-		if ($reason_phrase === '' && C\contains_key(self::$phrases, $code)) {
-			$reason_phrase = self::$phrases[$code];
-		}
-		return $reason_phrase;
-	}
+    private function getReason(int $code, string $reason_phrase): string {
+        if ($reason_phrase === '' && C\contains_key(self::$phrases, $code)) {
+            $reason_phrase = self::$phrases[$code];
+        }
+        return $reason_phrase;
+    }
 }

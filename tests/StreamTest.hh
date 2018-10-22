@@ -1,4 +1,5 @@
 <?hh // strict
+
 namespace Usox\HackTTP;
 
 use function Facebook\FBExpect\expect;
@@ -29,7 +30,7 @@ class StreamTest extends \Facebook\HackTest\HackTest {
 		\fwrite($handle, 'data');
 		$stream = new Stream($handle);
 
-		expect((string) $stream)->toBeSame('i am deprecated');
+		expect((string)$stream)->toBeSame('i am deprecated');
 
 		$stream->close();
 	}
@@ -54,8 +55,8 @@ class StreamTest extends \Facebook\HackTest\HackTest {
 		\fwrite($handle, 'data');
 		$stream = new Stream($handle);
 
-		expect((string) $stream->getFullContents())->toBeSame('data');
-		expect((string) $stream->getFullContents())->toBeSame('data');
+		expect((string)$stream->getFullContents())->toBeSame('data');
+		expect((string)$stream->getFullContents())->toBeSame('data');
 
 		$stream->close();
 	}
@@ -65,15 +66,21 @@ class StreamTest extends \Facebook\HackTest\HackTest {
 		\fwrite($handle, 'data');
 		$stream = new Stream($handle);
 
-		expect($stream->tell())->toBeSame(4, 'Stream cursor already at the end');
+		expect($stream->tell())->toBeSame(
+			4,
+			'Stream cursor already at the end',
+		);
 		expect($stream->eof())->toBeFalse('Stream still not eof');
-		expect($stream->read(1))->toBeSame('', 'Need to read one more byte to reach eof');
+		expect($stream->read(1))->toBeSame(
+			'',
+			'Need to read one more byte to reach eof',
+		);
 		expect($stream->eof())->toBeTrue();
 
 		$stream->close();
 	}
 
-	public function testGetSize(): void{
+	public function testGetSize(): void {
 		$size = \filesize(__FILE__);
 		$handle = \fopen(__FILE__, 'r');
 		$stream = new Stream($handle);
@@ -86,7 +93,7 @@ class StreamTest extends \Facebook\HackTest\HackTest {
 		$stream->close();
 	}
 
-	public function testEnsuresSizeIsConsistent(): void{
+	public function testEnsuresSizeIsConsistent(): void {
 		$h = \fopen('php://temp', 'w+');
 
 		expect(\fwrite($h, 'foo'))->toBeSame(3);
@@ -142,18 +149,21 @@ class StreamTest extends \Facebook\HackTest\HackTest {
 		$this->assertStreamStateAfterClosedOrDetached($stream);
 	}
 
-	private function assertStreamStateAfterClosedOrDetached(Stream $stream): void {
+	private function assertStreamStateAfterClosedOrDetached(
+		Stream $stream,
+	): void {
 		expect($stream->isReadable())->toBeFalse();
 		expect($stream->isWritable())->toBeFalse();
 		expect($stream->isSeekable())->toBeFalse();
 		expect($stream->getSize())->toBeNull();
 		expect($stream->getMetadata())->toBeSame(dict[]);
 
-		$throws = function ($fn) {
+		$throws = function($fn) {
 			try {
 				$fn();
 			} catch (\Exception $e) {
-				expect(Str\contains($e->getMessage(), 'Stream is detached'))->toBeTrue();
+				expect(Str\contains($e->getMessage(), 'Stream is detached'))
+					->toBeTrue();
 
 				return;
 			}
@@ -161,13 +171,27 @@ class StreamTest extends \Facebook\HackTest\HackTest {
 			//$this->fail('Exception should be thrown after the stream is detached.');
 		};
 
-		$throws(function () use ($stream) { $stream->read(10); });
-		$throws(function () use ($stream) { $stream->write('bar'); });
-		$throws(function () use ($stream) { $stream->seek(10); });
-		$throws(function () use ($stream) { $stream->tell(); });
-		$throws(function () use ($stream) { $stream->eof(); });
-		$throws(function () use ($stream) { $stream->getRemainingContents(); });
-		$throws(function () use ($stream) { $stream->getFullContents(); });
+		$throws(function() use ($stream) {
+			$stream->read(10);
+		});
+		$throws(function() use ($stream) {
+			$stream->write('bar');
+		});
+		$throws(function() use ($stream) {
+			$stream->seek(10);
+		});
+		$throws(function() use ($stream) {
+			$stream->tell();
+		});
+		$throws(function() use ($stream) {
+			$stream->eof();
+		});
+		$throws(function() use ($stream) {
+			$stream->getRemainingContents();
+		});
+		$throws(function() use ($stream) {
+			$stream->getFullContents();
+		});
 	}
 
 	public function testStreamReadingWithZeroLength(): void {
@@ -191,10 +215,10 @@ class StreamTest extends \Facebook\HackTest\HackTest {
 					$stream->close();
 					throw $e;
 				}
-			}
+			},
 		)->toThrow(
 			\RuntimeException::class,
-			'Length parameter cannot be negative'
+			'Length parameter cannot be negative',
 		);
 
 		$stream->close();
@@ -214,11 +238,8 @@ class StreamTest extends \Facebook\HackTest\HackTest {
 					$stream->close();
 					throw $e;
 				}
-			}
-		)->toThrow(
-			\RuntimeException::class,
-			'Unable to read from stream'
-		);
+			},
+		)->toThrow(\RuntimeException::class, 'Unable to read from stream');
 
 		self::$has_fread_error = false;
 		$stream->close();

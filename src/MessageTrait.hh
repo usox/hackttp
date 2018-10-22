@@ -34,10 +34,7 @@ trait MessageTrait {
 	}
 
 	public function hasHeader(string $header): bool {
-		return C\contains_key(
-			$this->header_names,
-			Str\lowercase($header)
-		);
+		return C\contains_key($this->header_names, Str\lowercase($header));
 	}
 
 	public function getHeader(string $header): vec<string> {
@@ -50,10 +47,7 @@ trait MessageTrait {
 	}
 
 	public function getHeaderLine(string $header): string {
-		return Str\join(
-			$this->getHeader($header),
-			', '
-		);
+		return Str\join($this->getHeader($header), ', ');
 	}
 
 	public function withHeader(string $header, vec<string> $values): this {
@@ -65,39 +59,29 @@ trait MessageTrait {
 				$new->headers,
 				($key) ==> {
 					return $key !== $new->header_names[$normalized];
-				}
+				},
 			);
 		}
 		$new->header_names[$normalized] = $header;
-		$new->headers[$header] = Vec\map(
-			$values,
-			($value) ==> Str\trim($value, " \t")
-		);
+		$new->headers[$header] =
+			Vec\map($values, ($value) ==> Str\trim($value, " \t"));
 
 		return $new;
 	}
 
 	public function withHeaderLine(string $name, string $value): this {
-		return $this->withHeader(
-			$name,
-			Str\split($value, ',')
-		);
+		return $this->withHeader($name, Str\split($value, ','));
 	}
 
 	public function withAddedHeader(string $header, vec<string> $values): this {
-		$values = Vec\map(
-			$values,
-			($value) ==> Str\trim($value, " \t")
-		);
+		$values = Vec\map($values, ($value) ==> Str\trim($value, " \t"));
 		$normalized = Str\lowercase($header);
 		$new = clone $this;
 
 		if (C\contains_key($new->header_names, $normalized)) {
 			$header = $this->header_names[$normalized];
-			$new->headers[$header] = Vec\concat(
-				$this->headers[$header],
-				$values
-			);
+			$new->headers[$header] =
+				Vec\concat($this->headers[$header], $values);
 		} else {
 			$new->header_names[$normalized] = $header;
 			$new->headers[$header] = $values;
@@ -107,10 +91,7 @@ trait MessageTrait {
 	}
 
 	public function withAddedHeaderLine(string $name, string $value): this {
-		return $this->withAddedHeader(
-			$name,
-			Str\split($value, ',')
-		);
+		return $this->withAddedHeader($name, Str\split($value, ','));
 	}
 
 	public function withoutHeader(string $header): this {

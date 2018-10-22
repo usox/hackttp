@@ -8,18 +8,20 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 	public function testParsesProvidedUri(): void {
 		$orig_uri = 'https://user:pass@example.com:8080/path/123?q=abc#test';
-		
+
 		$uri = new Uri($orig_uri);
 
 		expect($uri->getScheme())->toBeSame('https');
 		expect($uri->getAuthority())->toBeSame('user:pass@example.com:8080');
-		expect($uri->getUserInfo())->toBePHPEqual(['user' => 'user', 'pass' => 'pass']);
+		expect($uri->getUserInfo())->toBePHPEqual(
+			['user' => 'user', 'pass' => 'pass'],
+		);
 		expect($uri->getHost())->toBeSame('example.com');
 		expect($uri->getPort())->toBeSame(8080);
 		expect($uri->getPath())->toBeSame('/path/123');
 		expect($uri->getRawQuery())->toBeSame('q=abc');
 		expect($uri->getFragment())->toBeSame('test');
-		expect((string) $uri)->toBeSame($orig_uri);
+		expect((string)$uri)->toBeSame($orig_uri);
 	}
 
 	public function testCanTransformAndRetrievePartsIndividually(): void {
@@ -34,39 +36,37 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		expect($uri->getScheme())->toBeSame('https');
 		expect($uri->getAuthority())->toBeSame('user:pass@example.com:8080');
-		expect($uri->getUserInfo())->toBePHPEqual(['user' => 'user', 'pass' => 'pass']);
+		expect($uri->getUserInfo())->toBePHPEqual(
+			['user' => 'user', 'pass' => 'pass'],
+		);
 		expect($uri->getHost())->toBeSame('example.com');
 		expect($uri->getPort())->toBeSame(8080);
 		expect($uri->getPath())->toBeSame('/path/123');
 		expect($uri->getRawQuery())->toBeSame('q=abc');
 		expect($uri->getFragment())->toBeSame('test');
-		expect((string) $uri)->toBeSame('https://user:pass@example.com:8080/path/123?q=abc#test');
+		expect((string)$uri)->toBeSame(
+			'https://user:pass@example.com:8080/path/123?q=abc#test',
+		);
 	}
 
 	public function testPortMustBeValid(): void {
-		expect(
-			() ==> (new Uri())->withPort(100000)
-		)->toThrow(
+		expect(() ==> (new Uri())->withPort(100000))->toThrow(
 			\InvalidArgumentException::class,
-			'Invalid port: 100000. Must be between 1 and 65535'
+			'Invalid port: 100000. Must be between 1 and 65535',
 		);
 	}
 
 	public function testWithPortCannotBeZero(): void {
-		expect(
-			() ==> (new Uri())->withPort(0)
-		)->toThrow(
+		expect(() ==> (new Uri())->withPort(0))->toThrow(
 			\InvalidArgumentException::class,
-			'Invalid port: 0. Must be between 1 and 65535'
+			'Invalid port: 0. Must be between 1 and 65535',
 		);
 	}
 
 	public function testParseUriPortCannotBeZero(): void {
-		expect(
-			() ==> new Uri('//example.com:0')
-		)->toThrow(
+		expect(() ==> new Uri('//example.com:0'))->toThrow(
 			\InvalidArgumentException::class,
-			'Unable to parse URI'
+			'Unable to parse URI',
 		);
 	}
 
@@ -77,12 +77,14 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		expect($uri->getScheme())->toBeSame('0');
 		expect($uri->getAuthority())->toBeSame('0:0@0');
-		expect($uri->getUserInfo())->toBePHPEqual(['user' => '0', 'pass' => '0']);
+		expect($uri->getUserInfo())->toBePHPEqual(
+			['user' => '0', 'pass' => '0'],
+		);
 		expect($uri->getHost())->toBeSame('0');
 		expect($uri->getPath())->toBeSame('/0');
 		expect($uri->getRawQuery())->toBeSame('0');
 		expect($uri->getFragment())->toBeSame('0');
-		expect((string) $uri)->toBeSame($orig_uri);
+		expect((string)$uri)->toBeSame($orig_uri);
 	}
 
 	public function testCanConstructFalseyUriParts(): void {
@@ -96,36 +98,38 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		expect($uri->getScheme())->toBeSame('0');
 		expect($uri->getAuthority())->toBeSame('0:0@0');
-		expect($uri->getUserInfo())->toBePHPEqual(['user' => '0', 'pass' => '0']);
+		expect($uri->getUserInfo())->toBePHPEqual(
+			['user' => '0', 'pass' => '0'],
+		);
 		expect($uri->getHost())->toBeSame('0');
 		expect($uri->getPath())->toBeSame('/0');
 		expect($uri->getRawQuery())->toBeSame('0');
 		expect($uri->getFragment())->toBeSame('0');
-		expect((string) $uri)->toBeSame('0://0:0@0/0?0#0');
+		expect((string)$uri)->toBeSame('0://0:0@0/0?0#0');
 	}
 
 	public function testSchemeIsNormalizedToLowercase(): void {
 		$uri = new Uri('HTTP://example.com');
 
 		expect($uri->getScheme())->toBeSame('http');
-		expect((string) $uri)->toBeSame('http://example.com');
+		expect((string)$uri)->toBeSame('http://example.com');
 
 		$uri = (new Uri('//example.com'))->withScheme('HTTP');
 
 		expect($uri->getScheme())->toBeSame('http');
-		expect((string) $uri)->toBeSame('http://example.com');
+		expect((string)$uri)->toBeSame('http://example.com');
 	}
 
 	public function testHostIsNormalizedToLowercase(): void {
 		$uri = new Uri('//eXaMpLe.CoM');
 
 		expect($uri->getHost())->toBeSame('example.com');
-		expect((string) $uri)->toBeSame('//example.com');
+		expect((string)$uri)->toBeSame('//example.com');
 
 		$uri = (new Uri())->withHost('eXaMpLe.CoM');
 
 		expect($uri->getHost())->toBeSame('example.com');
-		expect((string) $uri)->toBeSame('//example.com');
+		expect((string)$uri)->toBeSame('//example.com');
 	}
 
 	public function testPortIsNullIfStandardPortForScheme(): void {
@@ -174,7 +178,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 		$uri = (new Uri('http://example.com:8080'))->withPort(null);
 
 		expect($uri->getPort())->toBeNull();
-		expect((string) $uri)->toBeSame('http://example.com');
+		expect((string)$uri)->toBeSame('http://example.com');
 	}
 
 	/**
@@ -184,14 +188,16 @@ class UriTest extends \Facebook\HackTest\HackTest {
 	public function testAuthorityWithUserInfoOrPortButWithoutHost(): void {
 		$uri = (new Uri())->withUserInfo('user', 'pass');
 
-		expect($uri->getUserInfo())->toBePHPEqual(['user' => 'user', 'pass' => 'pass']);
+		expect($uri->getUserInfo())->toBePHPEqual(
+			['user' => 'user', 'pass' => 'pass'],
+		);
 		expect($uri->getAuthority())->toBeSame('user:pass@');
 
 		$uri = $uri->withPort(8080);
 
 		expect($uri->getPort())->toBeSame(8080);
 		expect($uri->getAuthority())->toBeSame('user:pass@:8080');
-		expect((string) $uri)->toBeSame('//user:pass@:8080');
+		expect((string)$uri)->toBeSame('//user:pass@:8080');
 
 		$uri = $uri->withUserInfo('', null);
 
@@ -203,7 +209,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		expect($uri->getHost())->toBeSame('localhost');
 		expect($uri->getAuthority())->toBeSame('localhost');
-		expect((string) $uri)->toBeSame('http://localhost');
+		expect((string)$uri)->toBeSame('http://localhost');
 	}
 
 	public function testHostInHttpsUriDefaultsToLocalhost(): void {
@@ -211,7 +217,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		expect($uri->getHost())->toBeSame('localhost');
 		expect($uri->getAuthority())->toBeSame('localhost');
-		expect((string) $uri)->toBeSame('https://localhost');
+		expect((string)$uri)->toBeSame('https://localhost');
 	}
 
 	public function testFileSchemeWithEmptyHostReconstruction(): void {
@@ -221,7 +227,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		expect($uri->getHost())->toBeNull();
 		expect($uri->getAuthority())->toBeSame('');
-		expect((string) $uri)->toBeSame($orig_uri);
+		expect((string)$uri)->toBeSame($orig_uri);
 	}
 
 	public function testWithPathEncodesProperly(): void {
@@ -231,7 +237,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		// Query and fragment delimiters and multibyte chars are encoded.
 		expect($uri->getPath())->toBeSame($encoded_path);
-		expect((string) $uri)->toBeSame($encoded_path);
+		expect((string)$uri)->toBeSame($encoded_path);
 	}
 
 	public function testWithRawQueryEncodesProperly(): void {
@@ -242,7 +248,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 		// A query starting with a "?" is valid and must not be magically removed. Otherwise it would be impossible to
 		// construct such an URI. Also the "?" and "/" does not need to be encoded in the query.
 		expect($uri->getRawQuery())->toBeSame($encoded_query);
-		expect((string) $uri)->toBeSame('?'.$encoded_query);
+		expect((string)$uri)->toBeSame('?'.$encoded_query);
 	}
 
 	public function testWithFragmentEncodesProperly(): void {
@@ -253,30 +259,28 @@ class UriTest extends \Facebook\HackTest\HackTest {
 		// A fragment starting with a "#" is valid and must not be magically removed. Otherwise it would be impossible to
 		// construct such an URI. Also the "?" and "/" does not need to be encoded in the fragment.
 		expect($uri->getFragment())->toBeSame($encoded_fragment);
-		expect((string) $uri)->toBeSame('#'.$encoded_fragment);
+		expect((string)$uri)->toBeSame('#'.$encoded_fragment);
 	}
 
 	public function testAllowsForRelativeUri(): void {
 		$uri = (new Uri())->withPath('relative-foobar');
 
 		expect($uri->getPath())->toBeSame('relative-foobar');
-		expect((string) $uri)->toBeSame('relative-foobar');
+		expect((string)$uri)->toBeSame('relative-foobar');
 
 	}
 
 	public function testRelativePathAndAuhorityIsThrowsException(): void {
-		expect(
-			() ==> (new Uri())->withPath('foo')->withHost('example.com')
-		)->toThrow(\InvalidArgumentException::class);
+		expect(() ==> (new Uri())->withPath('foo')->withHost('example.com'))
+			->toThrow(\InvalidArgumentException::class);
 	}
 
-	public function testPathStartingWithTwoSlashesAndNoAuthorityIsInvalid(): void {
+	public function testPathStartingWithTwoSlashesAndNoAuthorityIsInvalid(
+	): void {
 		// URI "//foo" would be interpreted as network reference and thus change the original path to the host
-		expect(
-			() ==> (new Uri())->withPath('//foo')
-		)->toThrow(
+		expect(() ==> (new Uri())->withPath('//foo'))->toThrow(
 			\InvalidArgumentException::class,
-			'The path of a URI without an authority must not start with two slashes "//"'
+			'The path of a URI without an authority must not start with two slashes "//"',
 		);
 	}
 
@@ -287,19 +291,20 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		$uri = $uri->withScheme(null);
 
-		expect((string) $uri)->toBeSame('//example.org//path-not-host.com'); // This is still valid
+		expect((string)$uri)->toBeSame(
+			'//example.org//path-not-host.com',
+		); // This is still valid
 
 		expect(
-			() ==> $uri->withHost(null) // Now it becomes invalid
+			() ==> $uri->withHost(null), // Now it becomes invalid
 		)->toThrow(\InvalidArgumentException::class);
 	}
 
-	public function testRelativeUriWithPathBeginngWithColonSegmentIsInvalid(): void {
-		expect(
-			() ==> (new Uri())->withPath('mailto:foo')
-		)->toThrow(
-	 		\InvalidArgumentException::class,
-			'A relative URI must not have a path beginning with a segment containing a colon'
+	public function testRelativeUriWithPathBeginngWithColonSegmentIsInvalid(
+	): void {
+		expect(() ==> (new Uri())->withPath('mailto:foo'))->toThrow(
+			\InvalidArgumentException::class,
+			'A relative URI must not have a path beginning with a segment containing a colon',
 		);
 	}
 
@@ -308,9 +313,9 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		expect($uri->getPath())->toBeSame('/mailto:foo');
 
-		expect(
-			() ==> (new Uri('urn:mailto:foo'))->withScheme(null)
-		)->toThrow(\InvalidArgumentException::class);
+		expect(() ==> (new Uri('urn:mailto:foo'))->withScheme(null))->toThrow(
+			\InvalidArgumentException::class,
+		);
 	}
 
 	public function testDefaultReturnValuesOfGetters(): void {
@@ -324,10 +329,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 		expect($uri->getRawQuery())->toBeNull();
 		expect($uri->getFragment())->toBeNull();
 		expect($uri->getUserInfo())->toBePHPEqual(
-			[
-				'user' => '',
-				'pass' => null
-			],
+			['user' => '', 'pass' => null],
 		);
 	}
 
@@ -338,7 +340,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 		expect($uri->withUserInfo('user', 'pass'))->toNotBeSame($uri);
 		expect($uri->withHost('example.com'))->toNotBeSame($uri);
 		expect($uri->withPort(666))->toNotBeSame($uri);
-		expect($uri->withPath('/some/where'))->toNotBeSame($uri);	
+		expect($uri->withPath('/some/where'))->toNotBeSame($uri);
 		expect($uri->withRawQuery('q=a'))->toNotBeSame($uri);
 		expect($uri->withFragment('test'))->toNotBeSame($uri);
 	}
@@ -346,12 +348,12 @@ class UriTest extends \Facebook\HackTest\HackTest {
 	public function testWithQueryEncodesProperly(): void {
 		$query = dict[
 			'foo' => 'bar',
-			'f%=?oo' => 'bär'
+			'f%=?oo' => 'bär',
 		];
 
 		$uri = (new Uri())->withQuery($query);
 
 		expect($uri->getQuery())->toBeSame($query);
-		expect((string) $uri)->toBeSame('?foo=bar&f%25%3D%3Foo=b%C3%A4r');
+		expect((string)$uri)->toBeSame('?foo=bar&f%25%3D%3Foo=b%C3%A4r');
 	}
 }

@@ -24,45 +24,45 @@ class RequestTest extends HackTest {
 			->times(1)
 			->andReturn($raw_query);
 
-		$request = new Request(
-			'GET',
-			$uri,
-			dict['host' => vec[]]
-		);
+		$request = new Request('GET', $uri, dict['host' => vec[]]);
 
-		expect(
-			$request->getRequestTarget()
-		)
-		->toBeSame($result);
+		expect($request->getRequestTarget())
+			->toBeSame($result);
 	}
 
 	public function testWithRequestTargetReturnsInstanceWithTarget(): void {
 		$request_target = 'some-request-target';
 
-		$request = new Request('GET', mock(Message\UriInterface::class), dict['host' => vec[]]);
+		$request = new Request(
+			'GET',
+			mock(Message\UriInterface::class),
+			dict['host' => vec[]],
+		);
 
-		expect(
-			$request->withRequestTarget($request_target)->getRequestTarget()
-		)
-		->toBeSame($request_target);
+		expect($request->withRequestTarget($request_target)->getRequestTarget())
+			->toBeSame($request_target);
 	}
 
 	public function testGetMethodReturnsMethod(): void {
-		$request = new Request('GET', mock(Message\UriInterface::class), dict['host' => vec[]]);
+		$request = new Request(
+			'GET',
+			mock(Message\UriInterface::class),
+			dict['host' => vec[]],
+		);
 
-		expect(
-			$request->getMethod()
-		)
-		->toBeSame('GET');
+		expect($request->getMethod())
+			->toBeSame('GET');
 	}
 
 	public function testWithMethodSetsMethod(): void {
-		$request = new Request('GET', mock(Message\UriInterface::class), dict['host' => vec[]]);
+		$request = new Request(
+			'GET',
+			mock(Message\UriInterface::class),
+			dict['host' => vec[]],
+		);
 
-		expect(
-			$request->withMethod(Message\HTTPMethod::POST)->getMethod()
-		)
-		->toBeSame('POST');
+		expect($request->withMethod(Message\HTTPMethod::POST)->getMethod())
+			->toBeSame('POST');
 	}
 
 	public function testGetUriReturnsUri(): void {
@@ -70,10 +70,8 @@ class RequestTest extends HackTest {
 
 		$request = new Request('GET', $uri, dict['host' => vec[]]);
 
-		expect(
-			$request->getUri()
-		)
-		->toBeSame($uri);
+		expect($request->getUri())
+			->toBeSame($uri);
 	}
 
 	public function testWithUriSetsUri(): void {
@@ -96,24 +94,20 @@ class RequestTest extends HackTest {
 			mock(Message\UriInterface::class),
 			dict[
 				'host' => vec[],
-				$sample_header => $sample_header_values
-			]
+				$sample_header => $sample_header_values,
+			],
 		);
 		$new_request = $request->withUri($uri, shape('preserveHost' => false));
 
-		expect(
-			$new_request->getUri()
-		)
-		->toBeSame($uri);
+		expect($new_request->getUri())
+			->toBeSame($uri);
 
-		expect(
-			$new_request->getHeaders()
-		)
-		->toBeSame(
-			dict[
-				'host' => vec[Str\format('%s:%d', $host, $port)],
-				$sample_header => $sample_header_values
-			]
-		);
+		expect($new_request->getHeaders())
+			->toBeSame(
+				dict[
+					'host' => vec[Str\format('%s:%d', $host, $port)],
+					$sample_header => $sample_header_values,
+				],
+			);
 	}
 }

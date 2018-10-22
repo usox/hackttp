@@ -18,13 +18,42 @@ final class Stream implements StreamInterface {
 	private bool $seekable = false;
 
 	private static vec<string> $read_modes = vec[
-		'r', 'w+', 'r+', 'x+', 'c+', 'rb', 'w+b', 'r+b', 'x+b',
-		'c+b', 'rt', 'w+t', 'r+t', 'x+t', 'c+t', 'a+'
+		'r',
+		'w+',
+		'r+',
+		'x+',
+		'c+',
+		'rb',
+		'w+b',
+		'r+b',
+		'x+b',
+		'c+b',
+		'rt',
+		'w+t',
+		'r+t',
+		'x+t',
+		'c+t',
+		'a+',
 	];
 
 	private static vec<string> $write_modes = vec[
-		'w', 'w+', 'rw', 'r+', 'x+', 'c+', 'wb', 'w+b', 'r+b',
-		'x+b', 'c+b', 'w+t', 'r+t', 'x+t', 'c+t', 'a', 'a+'
+		'w',
+		'w+',
+		'rw',
+		'r+',
+		'x+',
+		'c+',
+		'wb',
+		'w+b',
+		'r+b',
+		'x+b',
+		'c+b',
+		'w+t',
+		'r+t',
+		'x+t',
+		'c+t',
+		'a',
+		'a+',
 	];
 
 	public function __construct(private ?resource $stream) {
@@ -33,7 +62,7 @@ final class Stream implements StreamInterface {
 		}
 
 		$meta = \stream_get_meta_data($this->stream);
-		$this->seekable = (bool) $meta['seekable'];
+		$this->seekable = (bool)$meta['seekable'];
 		$this->readable = C\contains(static::$read_modes, $meta['mode']);
 		$this->writable = C\contains(static::$write_modes, $meta['mode']);
 		$this->has_uri = $meta['uri'] !== null;
@@ -73,7 +102,8 @@ final class Stream implements StreamInterface {
 
 		$result = $this->stream;
 		$this->stream = $this->size = null;
-		$this->has_uri = $this->readable = $this->writable = $this->seekable = false;
+		$this->has_uri = $this->readable = $this->writable = $this->seekable =
+			false;
 
 		return $result;
 	}
@@ -147,8 +177,12 @@ final class Stream implements StreamInterface {
 			throw new \RuntimeException('Stream is not seekable');
 		}
 		if (\fseek($this->stream, $offset, $whence) === -1) {
-			throw new \RuntimeException('Unable to seek to stream position '
-				. $offset . ' with whence ' . \var_export($whence, true));
+			throw new \RuntimeException(
+				'Unable to seek to stream position '.
+				$offset.
+				' with whence '.
+				\var_export($whence, true),
+			);
 		}
 	}
 
@@ -172,7 +206,7 @@ final class Stream implements StreamInterface {
 			throw new \RuntimeException('Unable to read from stream');
 		}
 
-		return (string) $content;
+		return (string)$content;
 	}
 
 	public function write(string $string): int {
@@ -180,7 +214,8 @@ final class Stream implements StreamInterface {
 			throw new \RuntimeException('Stream is detached');
 		}
 		if ($this->isWritable() === false) {
-			throw new \RuntimeException('Cannot write to a non-writable stream');
+			throw
+				new \RuntimeException('Cannot write to a non-writable stream');
 		}
 
 		$this->size = null;

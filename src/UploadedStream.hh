@@ -69,7 +69,12 @@ final class UploadedStream implements Message\UploadedFileInterface {
 				'Invalid path provided for move operation; must be a non-empty string',
 			);
 		}
-		using ($target = Filesystem\open_file($target_path, Filesystem\FileMode::WRITE_TRUNCATE)) {
+		using (
+			$target = Filesystem\open_file(
+				$target_path,
+				Filesystem\FileMode::WRITE_TRUNCATE,
+			)
+		) {
 			$buffer_size = 8192;
 			while (!$this->stream->eof()) {
 				$buf = $this->stream->read($buffer_size);

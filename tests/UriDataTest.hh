@@ -1,4 +1,5 @@
 <?hh // strict
+
 namespace Usox\HackTTP;
 
 use function Facebook\FBExpect\expect;
@@ -10,18 +11,14 @@ class UriDataTest extends \Facebook\HackTest\HackTest {
 	public function testValidUrisStayValid(string $input): void {
 		$uri = new Uri($input);
 
-		expect(
-			(string) $uri
-		)->toBeSame($input);
+		expect((string)$uri)->toBeSame($input);
 	}
 
 	<<DataProvider('getValidUris')>>
 	public function testFromParts(string $input): void {
 		$uri = new Uri($input);
 
-		expect(
-			(string) $uri
-		)->toBeSame($input);
+		expect((string)$uri)->toBeSame($input);
 	}
 
 	public function getValidUris(): vec<vec<string>> {
@@ -54,13 +51,11 @@ class UriDataTest extends \Facebook\HackTest\HackTest {
 
 	<<DataProvider('getInvalidUris')>>
 	public function testInvalidUrisThrowException(string $invalidUri): void {
-		expect(
-			() ==> new Uri($invalidUri)
-		)
-		->toThrow(
-			\InvalidArgumentException::class,
-			'Unable to parse URI: '.$invalidUri
-		);
+		expect(() ==> new Uri($invalidUri))
+			->toThrow(
+				\InvalidArgumentException::class,
+				'Unable to parse URI: '.$invalidUri,
+			);
 	}
 
 	public function getInvalidUris(): vec<vec<string>> {
@@ -77,18 +72,12 @@ class UriDataTest extends \Facebook\HackTest\HackTest {
 	public function testIsDefaultPort(
 		string $scheme,
 		int $port,
-		bool $is_default_port
+		bool $is_default_port,
 	): void {
-		$uri = new Uri(
-			Str\format('%s://some-host.de:%d', $scheme, $port)
-		);
+		$uri = new Uri(Str\format('%s://some-host.de:%d', $scheme, $port));
 
-		expect(
-			Str\contains((string) $uri, (string) $port) !== false
-		)
-		->toBeSame(
-			$is_default_port === false,
-		);
+		expect(Str\contains((string)$uri, (string)$port) !== false)
+			->toBeSame($is_default_port === false);
 	}
 
 	public function getPortTestCases(): vec<vec<mixed>> {
@@ -114,19 +103,61 @@ class UriDataTest extends \Facebook\HackTest\HackTest {
 
 		return vec[
 			// Percent encode spaces
-			vec['/pa th?q=va lue#frag ment', '/pa%20th', 'q=va%20lue', 'frag%20ment', '/pa%20th?q=va%20lue#frag%20ment'],
+			vec[
+				'/pa th?q=va lue#frag ment',
+				'/pa%20th',
+				'q=va%20lue',
+				'frag%20ment',
+				'/pa%20th?q=va%20lue#frag%20ment',
+			],
 			// Percent encode multibyte
-			vec['/€?€#€', '/%E2%82%AC', '%E2%82%AC', '%E2%82%AC', '/%E2%82%AC?%E2%82%AC#%E2%82%AC'],
+			vec[
+				'/€?€#€',
+				'/%E2%82%AC',
+				'%E2%82%AC',
+				'%E2%82%AC',
+				'/%E2%82%AC?%E2%82%AC#%E2%82%AC',
+			],
 			// Don't encode something that's already encoded
-			vec['/pa%20th?q=va%20lue#frag%20ment', '/pa%20th', 'q=va%20lue', 'frag%20ment', '/pa%20th?q=va%20lue#frag%20ment'],
+			vec[
+				'/pa%20th?q=va%20lue#frag%20ment',
+				'/pa%20th',
+				'q=va%20lue',
+				'frag%20ment',
+				'/pa%20th?q=va%20lue#frag%20ment',
+			],
 			// Percent encode invalid percent encodings
-			vec['/pa%2-th?q=va%2-lue#frag%2-ment', '/pa%252-th', 'q=va%252-lue', 'frag%252-ment', '/pa%252-th?q=va%252-lue#frag%252-ment'],
+			vec[
+				'/pa%2-th?q=va%2-lue#frag%2-ment',
+				'/pa%252-th',
+				'q=va%252-lue',
+				'frag%252-ment',
+				'/pa%252-th?q=va%252-lue#frag%252-ment',
+			],
 			// Don't encode path segments
-			vec['/pa/th//two?q=va/lue#frag/ment', '/pa/th//two', 'q=va/lue', 'frag/ment', '/pa/th//two?q=va/lue#frag/ment'],
+			vec[
+				'/pa/th//two?q=va/lue#frag/ment',
+				'/pa/th//two',
+				'q=va/lue',
+				'frag/ment',
+				'/pa/th//two?q=va/lue#frag/ment',
+			],
 			// Don't encode unreserved chars or sub-delimiters
-			vec["/$unreserved?$unreserved#$unreserved", "/$unreserved", $unreserved, $unreserved, "/$unreserved?$unreserved#$unreserved"],
+			vec[
+				"/$unreserved?$unreserved#$unreserved",
+				"/$unreserved",
+				$unreserved,
+				$unreserved,
+				"/$unreserved?$unreserved#$unreserved",
+			],
 			// Encoded unreserved chars are not decoded
-			vec['/p%61th?q=v%61lue#fr%61gment', '/p%61th', 'q=v%61lue', 'fr%61gment', '/p%61th?q=v%61lue#fr%61gment'],
+			vec[
+				'/p%61th?q=v%61lue#fr%61gment',
+				'/p%61th',
+				'q=v%61lue',
+				'fr%61gment',
+				'/p%61th?q=v%61lue#fr%61gment',
+			],
 		];
 	}
 
@@ -136,13 +167,13 @@ class UriDataTest extends \Facebook\HackTest\HackTest {
 		string $path,
 		string $query,
 		string $fragment,
-		string $output
+		string $output,
 	): void {
 		$uri = new Uri($input);
 
 		expect($uri->getPath())->toBeSame($path);
 		expect($uri->getRawQuery())->toBeSame($query);
 		expect($uri->getFragment())->toBeSame($fragment);
-		expect((string) $uri)->toBeSame($output);
+		expect((string)$uri)->toBeSame($output);
 	}
 }
