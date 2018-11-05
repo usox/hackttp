@@ -3,11 +3,12 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
+use type Usox\HackHttpFactory\RequestFactoryInterface;
 
-final class RequestFactory implements Message\RequestFactoryInterface {
+final class RequestFactory implements RequestFactoryInterface {
 
     public function createRequest(
-        string $method,
+        Message\HTTPMethod $method,
         Message\UriInterface $uri
     ): Message\RequestInterface {
         return new Request(

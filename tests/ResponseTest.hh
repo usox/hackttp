@@ -23,7 +23,7 @@ class ResponseTest extends HackTest {
 		$code = 666;
 		$phrase = 'some-reason';
 
-		$response = new Response($code, dict[], null, '1.1', $phrase);
+		$response = new Response($code, $phrase);
 
 		expect($response->getReasonPhrase())
 			->toBeSame($phrase);
@@ -47,7 +47,7 @@ class ResponseTest extends HackTest {
 		$header = 'some-header';
 		$header_value = vec['some-header-value'];
 
-		$response = new Response(200, dict[$header => $header_value]);
+		$response = new Response(200, 'some-readson', dict[$header => $header_value]);
 
 		expect($response->getHeaders())
 			->toBeSame(dict[
@@ -58,7 +58,7 @@ class ResponseTest extends HackTest {
 	public function testGetBodyReturnsSetStream(): void {
 		$stream = mock(Message\StreamInterface::class);
 
-		expect((new Response(200, dict[], $stream))->getBody())
+		expect((new Response(200, 'some-reason', dict[], $stream))->getBody())
 			->toBeSame($stream);
 	}
 }

@@ -24,7 +24,7 @@ class RequestTest extends HackTest {
 			->times(1)
 			->andReturn($raw_query);
 
-		$request = new Request('GET', $uri, dict['host' => vec[]]);
+		$request = new Request(Message\HTTPMethod::GET, $uri, dict['host' => vec[]]);
 
 		expect($request->getRequestTarget())
 			->toBeSame($result);
@@ -34,7 +34,7 @@ class RequestTest extends HackTest {
 		$request_target = 'some-request-target';
 
 		$request = new Request(
-			'GET',
+			Message\HTTPMethod::GET,
 			mock(Message\UriInterface::class),
 			dict['host' => vec[]],
 		);
@@ -45,7 +45,7 @@ class RequestTest extends HackTest {
 
 	public function testGetMethodReturnsMethod(): void {
 		$request = new Request(
-			'GET',
+			Message\HTTPMethod::GET,
 			mock(Message\UriInterface::class),
 			dict['host' => vec[]],
 		);
@@ -56,7 +56,7 @@ class RequestTest extends HackTest {
 
 	public function testWithMethodSetsMethod(): void {
 		$request = new Request(
-			'GET',
+			Message\HTTPMethod::GET,
 			mock(Message\UriInterface::class),
 			dict['host' => vec[]],
 		);
@@ -68,7 +68,7 @@ class RequestTest extends HackTest {
 	public function testGetUriReturnsUri(): void {
 		$uri = mock(Message\UriInterface::class);
 
-		$request = new Request('GET', $uri, dict['host' => vec[]]);
+		$request = new Request(Message\HTTPMethod::GET, $uri, dict['host' => vec[]]);
 
 		expect($request->getUri())
 			->toBeSame($uri);
@@ -90,7 +90,7 @@ class RequestTest extends HackTest {
 			->andReturn($port);
 
 		$request = new Request(
-			'GET',
+			Message\HTTPMethod::GET,
 			mock(Message\UriInterface::class),
 			dict[
 				'host' => vec[],

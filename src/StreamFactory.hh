@@ -3,8 +3,9 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
+use type Usox\HackHttpFactory\StreamFactoryInterface;
 
-final class StreamFactory implements Message\StreamFactoryInterface {
+final class StreamFactory implements StreamFactoryInterface {
 
     public function createStream(
         string $content = ''

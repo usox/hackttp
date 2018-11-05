@@ -9,18 +9,15 @@ class Request implements Message\RequestInterface {
 
     use MessageTrait;
 
-    private Message\HTTPMethod $method;
-
     private ?string $request_target;
 
     public function __construct(
-        string $method,
+        private Message\HTTPMethod $method,
         private Message\UriInterface $uri,
         dict<string, vec<string>> $headers = dict[],
         ?Message\StreamInterface $body = null,
         string $version = '1.1',
     ) {
-        $this->method = Message\HTTPMethod::assert(Str\uppercase($method));
         $this->setHeaders($headers);
         $this->protocol_version = $version;
         if (!$this->hasHeader('Host')) {

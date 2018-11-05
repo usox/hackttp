@@ -16,13 +16,19 @@ final class ServerRequest
 
 	private dict<string, string> $post_body = dict[];
 
+    public function __construct(
+        Message\HTTPMethod $method,
+        Message\UriInterface $uri,
+		private dict<string, string> $server_params
+    ) {
+		parent::__construct($method, $uri);
+    }
+
 	public function getServerParams(): Message\ServerParamInterface {
-		/* HH_FIXME[2050] Access to super global */
-		return new ServerParam($_SERVER);
+		return new ServerParam($this->server_params);
 	}
 
 	public function getCookieParams(): dict<string, string> {
-		// TBD
 		return $this->cookie_params;
 	}
 

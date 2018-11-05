@@ -3,8 +3,9 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
+use type Usox\HackHttpFactory\ResponseFactoryInterface;
 
-final class ResponseFactory implements Message\ResponseFactoryInterface {
+final class ResponseFactory implements ResponseFactoryInterface {
 
     public function createResponse(
         int $code = 200,
@@ -12,9 +13,6 @@ final class ResponseFactory implements Message\ResponseFactoryInterface {
     ): Message\ResponseInterface {
         return new Response(
             $code,
-            dict[],
-            null,
-            '1.1',
             $phrase
         );
     }

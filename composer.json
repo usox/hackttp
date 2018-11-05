@@ -13,16 +13,16 @@
 		}
 	],
 	"require": {
-		"hhvm": ">=3.28",
+		"hhvm": "^3.29",
 		"hhvm/experimental-http-request-response-interfaces": "dev-next",
 		"hhvm/hsl": "dev-master",
 		"hhvm/hsl-experimental": "dev-master",
 		"hhvm/type-assert": "^3.2",
-		"ytake/psr-http-factory-hhi": "dev-master"
+		"usox/hack-http-factory-interfaces": "dev-master"
 	},
 	"require-dev": {
 		"usox/hackmock": "^1",
-		"hhvm/hhast": "^3.28"
+		"hhvm/hhast": "^3.29"
 	},
 	"autoload": {
 		"psr-4": {
@@ -30,8 +30,7 @@
 		}
 	},
 	"repositories": [
-		{ "type": "vcs", "url": "https://github.com/usox/hack-http-request-response-interfaces" },
-		{ "type": "vcs", "url": "https://github.com/usox/psr-http-factory-hhi" }
+		{ "type": "vcs", "url": "https://github.com/usox/hack-http-request-response-interfaces" }
 	],
 	"scripts": {
 		"tests": "env hhvm vendor/bin/hacktest tests"

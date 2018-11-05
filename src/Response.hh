@@ -74,10 +74,10 @@ class Response implements Message\ResponseInterface {
 
     public function __construct(
         private int $status_code = 200,
+        string $reason = '',
         dict<string, vec<string>> $headers = dict[],
         ?Message\StreamInterface $body = null,
         private string $protocol_version = '1.1',
-        string $reason = '',
     ) {
         $this->stream = $body;
 

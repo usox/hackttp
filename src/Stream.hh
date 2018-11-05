@@ -124,7 +124,7 @@ final class Stream implements StreamInterface {
 		$stats = \fstat($this->stream);
 
 		if (C\contains_key($stats, 'size')) {
-			$this->size = $stats['size'];
+			$this->size = (int) $stats['size'];
 			return $this->size;
 		}
 
