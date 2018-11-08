@@ -4,6 +4,7 @@ namespace Usox\HackTTP;
 
 use namespace HH\Lib\Experimental\Filesystem;
 use type Facebook\Experimental\Http\Message\StreamInterface;
+use type Facebook\Experimental\Http\Message\UploadedFileError;
 use function Facebook\FBExpect\expect;
 use function Usox\HackMock\{mock, prospect};
 use namespace HH\Lib\PseudoRandom;
@@ -26,7 +27,7 @@ class UploadedStreamTest extends \Facebook\HackTest\HackTest {
 		$uploaded_stream = new UploadedStream(
 			mock(StreamInterface::class),
 			$this->size,
-			\UPLOAD_ERR_OK,
+			null
 		);
 		expect($uploaded_stream->getSize())
 			->toBeSame($this->size);
@@ -36,7 +37,7 @@ class UploadedStreamTest extends \Facebook\HackTest\HackTest {
 		$uploaded_stream = new UploadedStream(
 			mock(StreamInterface::class),
 			$this->size,
-			\UPLOAD_ERR_INI_SIZE,
+			UploadedFileError::ERROR_INCOMPLETE
 		);
 		expect(() ==> $uploaded_stream->getStream())
 			->toThrow(
@@ -49,10 +50,10 @@ class UploadedStreamTest extends \Facebook\HackTest\HackTest {
 		$uploaded_stream = new UploadedStream(
 			mock(StreamInterface::class),
 			$this->size,
-			\UPLOAD_ERR_OK,
+			UploadedFileError::ERROR_INCOMPLETE
 		);
 		expect($uploaded_stream->getError())
-			->toBeSame(\UPLOAD_ERR_OK);
+			->toBeSame(UploadedFileError::ERROR_INCOMPLETE);
 	}
 
 	public function testGetClientMediaTypeReturnsTrpe(): void {
@@ -61,8 +62,8 @@ class UploadedStreamTest extends \Facebook\HackTest\HackTest {
 		$uploaded_stream = new UploadedStream(
 			mock(StreamInterface::class),
 			$this->size,
-			\UPLOAD_ERR_OK,
 			null,
+			'',
 			$media_type,
 		);
 		expect($uploaded_stream->getClientMediaType())
@@ -75,7 +76,7 @@ class UploadedStreamTest extends \Facebook\HackTest\HackTest {
 		$uploaded_stream = new UploadedStream(
 			mock(StreamInterface::class),
 			$this->size,
-			\UPLOAD_ERR_OK,
+			null,
 			$filename,
 		);
 		expect($uploaded_stream->getClientFilename())
@@ -85,7 +86,7 @@ class UploadedStreamTest extends \Facebook\HackTest\HackTest {
 	public function testMoveToMoves(): void {
 		$stream = mock(StreamInterface::class);
 		$uploaded_stream =
-			new UploadedStream($stream, $this->size, \UPLOAD_ERR_OK);
+			new UploadedStream($stream, $this->size);
 		$buffer = 'some-buffer';
 
 		prospect($stream, 'eof')
