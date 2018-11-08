@@ -10,9 +10,9 @@ final class ServerRequest
 
 	private dict<string, string> $cookie_params = dict[];
 
-	private vec<Message\UploadedFileInterface> $uploaded_files = vec[];
+	private dict<string, Message\UploadedFileInterface> $uploaded_files = dict[];
 
-	private mixed $query_params;
+	private dict<string, string> $query_params = dict[];
 
 	private dict<string, string> $post_body = dict[];
 
@@ -39,23 +39,23 @@ final class ServerRequest
 		return $server_request;
 	}
 
-	public function getQueryParams(): mixed {
+	public function getQueryParams(): dict<string, string> {
 		// TBD
 		return $this->query_params;
 	}
 
-	public function withQueryParams(mixed $query): this {
+	public function withQueryParams(dict<string, string> $query): this {
 		$server_request = clone $this;
 		$server_request->query_params = $query;
 
 		return $server_request;
 	}
 
-	public function getUploadedFiles(): vec<Message\UploadedFileInterface> {
+	public function getUploadedFiles(): dict<string, Message\UploadedFileInterface> {
 		return $this->uploaded_files;
 	}
 
-	public function withUploadedFiles(vec<Message\UploadedFileInterface> $uploaded_files): this {
+	public function withUploadedFiles(dict<string, Message\UploadedFileInterface> $uploaded_files): this {
 		$server_request = clone $this;
 		$server_request->uploaded_files = $uploaded_files;
 
