@@ -62,7 +62,7 @@ final class ServerRequest
 		return $server_request;
 	}
 
-	public function getPostBody(): dict<string, string> {
+	public function getParsedBody(): dict<string, string> {
 		$server_params = $this->getServerParams();
 		if (
 			$server_params->getRequestMethod() === Message\HTTPMethod::POST &&
@@ -77,7 +77,7 @@ final class ServerRequest
 		return dict[];
 	}
 
-	public function withPostBody(dict<string, string> $data): this {
+	public function withParsedBody(dict<string, string> $data): this {
 		$server_request = clone $this;
 		$server_request->post_body = $data;
 
