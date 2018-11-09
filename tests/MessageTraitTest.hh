@@ -124,7 +124,7 @@ class MessageTraitTest extends HackTest {
   }
 
   public function testWithBodyReturnsSetBody(): void {
-    $body = mock(StreamInterface::class);
+    $body = 'some-body';
 
     expect($this->createImplementation()->withBody($body)->getBody())
       ->toBeSame($body);

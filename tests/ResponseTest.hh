@@ -56,10 +56,10 @@ class ResponseTest extends HackTest {
       ]);
   }
 
-  public function testGetBodyReturnsSetStream(): void {
-    $stream = mock(Message\StreamInterface::class);
+  public function testGetBodyReturnsSetBody(): void {
+    $body = 'some-body';
 
-    expect((new Response(200, 'some-reason', dict[], $stream))->getBody())
-      ->toBeSame($stream);
+    expect((new Response(200, 'some-reason', dict[], $body))->getBody())
+      ->toBeSame($body);
   }
 }

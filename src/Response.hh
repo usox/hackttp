@@ -76,10 +76,10 @@ class Response implements Message\ResponseInterface {
     private int $status_code = 200,
     string $reason = '',
     dict<string, vec<string>> $headers = dict[],
-    ?Message\StreamInterface $body = null,
+    ?string $body = null,
     private string $protocol_version = '1.1',
   ) {
-    $this->stream = $body;
+    $this->body = $body;
 
     $this->setHeaders($headers);
 

@@ -11,14 +11,14 @@ class UriDataTest extends \Facebook\HackTest\HackTest {
   public function testValidUrisStayValid(string $input): void {
     $uri = new Uri($input);
 
-    expect((string)$uri)->toBeSame($input);
+    expect($uri->toString())->toBeSame($input);
   }
 
   <<DataProvider('getValidUris')>>
   public function testFromParts(string $input): void {
     $uri = new Uri($input);
 
-    expect((string)$uri)->toBeSame($input);
+    expect($uri->toString())->toBeSame($input);
   }
 
   public function getValidUris(): vec<vec<string>> {
@@ -76,7 +76,7 @@ class UriDataTest extends \Facebook\HackTest\HackTest {
   ): void {
     $uri = new Uri(Str\format('%s://some-host.de:%d', $scheme, $port));
 
-    expect(Str\contains((string)$uri, (string)$port) !== false)
+    expect(Str\contains($uri->toString(), (string)$port) !== false)
       ->toBeSame($is_default_port === false);
   }
 
@@ -174,6 +174,6 @@ class UriDataTest extends \Facebook\HackTest\HackTest {
     expect($uri->getPath())->toBeSame($path);
     expect($uri->getRawQuery())->toBeSame($query);
     expect($uri->getFragment())->toBeSame($fragment);
-    expect((string)$uri)->toBeSame($output);
+    expect($uri->toString())->toBeSame($output);
   }
 }

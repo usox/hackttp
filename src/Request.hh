@@ -15,7 +15,7 @@ class Request implements Message\RequestInterface {
     private Message\HTTPMethod $method,
     private Message\UriInterface $uri,
     dict<string, vec<string>> $headers = dict[],
-    ?Message\StreamInterface $body = null,
+    ?string $body = null,
     string $version = '1.1',
   ) {
     $this->setHeaders($headers);
@@ -23,7 +23,8 @@ class Request implements Message\RequestInterface {
     if (!$this->hasHeader('Host')) {
       $this->updateHostFromUri();
     }
-    $this->stream = $body;
+
+    $this->body = $body;
   }
 
   public function getRequestTarget(): string {

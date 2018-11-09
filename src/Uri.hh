@@ -51,7 +51,7 @@ final class Uri implements UriInterface {
     }
   }
 
-  public function __toString(): string {
+  public function toString(): string {
     $uri = '';
 
     if ($this->scheme !== '') {

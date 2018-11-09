@@ -2,7 +2,6 @@
 
 namespace Usox\HackTTP;
 
-use type Facebook\Experimental\Http\Message\StreamInterface;
 use namespace HH\Lib\{C, Dict, Str, Vec};
 
 trait MessageTrait {
@@ -13,7 +12,7 @@ trait MessageTrait {
 
   private string $protocol_version = '1.1';
 
-  private ?StreamInterface $stream;
+  private ?string $body;
 
   public function getProtocolVersion(): string {
     return $this->protocol_version;
@@ -108,20 +107,20 @@ trait MessageTrait {
     return $new;
   }
 
-  public function getBody(): StreamInterface {
-    if ($this->stream === null) {
+  public function getBody(): string {
+    if ($this->body === null) {
       // This is subject to change, maybe we use some kind of dummy stream
       throw new \InvalidArgumentException('No body available');
     }
-    return $this->stream;
+    return $this->body;
   }
 
-  public function withBody(StreamInterface $body): this {
-    if ($body === $this->stream) {
+  public function withBody(string $body): this {
+    if ($body === $this->body) {
       return $this;
     }
     $new = clone $this;
-    $new->stream = $body;
+    $new->body = $body;
 
     return $new;
   }
