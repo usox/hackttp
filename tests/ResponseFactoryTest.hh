@@ -9,15 +9,10 @@ use function Usox\HackMock\{mock, prospect};
 
 class ResponseFactoryTest extends HackTest {
 
-	public function testCreateRequestReturnsInstance(): void {
-		$factory = new ResponseFactory();
+  public function testCreateRequestReturnsInstance(): void {
+    $factory = new ResponseFactory();
 
-		expect(
-			$factory->createResponse(
-				200,
-				'some-response'
-			)
-		)
-		->toBeInstanceOf(Message\ResponseInterface::class);
-	}
+    expect($factory->createResponse(200, 'some-response'))
+      ->toBeInstanceOf(Message\ResponseInterface::class);
+  }
 }

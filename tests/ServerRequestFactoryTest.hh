@@ -10,21 +10,16 @@ use function Usox\HackMock\{mock, prospect};
 
 class ServerRequestFactoryTest extends HackTest {
 
-	public function testCreateServerRequestReturnsInstance(): void {
-		$factory = new ServerRequestFactory();
+  public function testCreateServerRequestReturnsInstance(): void {
+    $factory = new ServerRequestFactory();
 
-		$uri = mock(Message\UriInterface::class);
+    $uri = mock(Message\UriInterface::class);
 
-		prospect($uri, 'getHost')
-			->once()
-			->andReturn(null);
+    prospect($uri, 'getHost')
+      ->once()
+      ->andReturn(null);
 
-		expect(
-			$factory->createServerRequest(
-				Message\HTTPMethod::GET,
-				$uri
-			)
-		)
-		->toBeInstanceOf(Message\ServerRequestInterface::class);
-	}
+    expect($factory->createServerRequest(Message\HTTPMethod::GET, $uri))
+      ->toBeInstanceOf(Message\ServerRequestInterface::class);
+  }
 }

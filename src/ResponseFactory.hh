@@ -7,13 +7,10 @@ use type Usox\HackHttpFactory\ResponseFactoryInterface;
 
 final class ResponseFactory implements ResponseFactoryInterface {
 
-    public function createResponse(
-        int $code = 200,
-        string $phrase = ''
-    ): Message\ResponseInterface {
-        return new Response(
-            $code,
-            $phrase
-        );
-    }
+  public function createResponse(
+    int $code = 200,
+    string $phrase = '',
+  ): Message\ResponseInterface {
+    return new Response($code, $phrase);
+  }
 }
