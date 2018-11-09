@@ -24,8 +24,15 @@ final class ServerRequest
 		parent::__construct($method, $uri);
     }
 
-	public function getServerParams(): Message\ServerParamInterface {
-		return new ServerParam($this->server_params);
+	public function getServerParams(): dict<string, string> {
+		return $this->server_params;
+	}
+
+	public function withServerParams(dict<string, string> $server_params): this {
+		$server_request = clone $this;
+		$server_request->server_params = $server_params;
+
+		return $server_request;
 	}
 
 	public function getCookieParams(): dict<string, string> {
@@ -63,13 +70,13 @@ final class ServerRequest
 	}
 
 	public function getParsedBody(): dict<string, string> {
-		$server_params = $this->getServerParams();
+		$method = $this->server_params['REQUEST_METHOD'] ?? null;
+		$content_type = $this->server_params['CONTENT_TYPE'] ?? null;
 		if (
-			$server_params->getRequestMethod() === Message\HTTPMethod::POST &&
+			$method === Message\HTTPMethod::POST && 
 			(
-				$server_params->getContentType() ===
-					'application/x-www-form-urlencoded' ||
-				$server_params->getContentType() === 'multipart/form-data'
+				$content_type === 'application/x-www-form-urlencoded' ||
+				$content_type === 'multipart/form-data'
 			)
 		) {
 			return $this->post_body;

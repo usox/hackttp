@@ -199,7 +199,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 		expect($uri->getAuthority())->toBeSame('user:pass@:8080');
 		expect((string)$uri)->toBeSame('//user:pass@:8080');
 
-		$uri = $uri->withUserInfo('', null);
+		$uri = $uri->withUserInfo('', '');
 
 		expect($uri->getAuthority())->toBeSame(':8080');
 	}
@@ -225,7 +225,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		$uri = new Uri($orig_uri);
 
-		expect($uri->getHost())->toBeNull();
+		expect($uri->getHost())->toBeSame('');
 		expect($uri->getAuthority())->toBeSame('');
 		expect((string)$uri)->toBeSame($orig_uri);
 	}
@@ -289,14 +289,14 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
 		expect($uri->getPath())->toBeSame('//path-not-host.com');
 
-		$uri = $uri->withScheme(null);
+		$uri = $uri->withScheme('');
 
 		expect((string)$uri)->toBeSame(
 			'//example.org//path-not-host.com',
 		); // This is still valid
 
 		expect(
-			() ==> $uri->withHost(null), // Now it becomes invalid
+			() ==> $uri->withHost(''), // Now it becomes invalid
 		)->toThrow(\InvalidArgumentException::class);
 	}
 
@@ -309,11 +309,11 @@ class UriTest extends \Facebook\HackTest\HackTest {
 	}
 
 	public function testRelativeUriWithPathHavingColonSegment(): void {
-		$uri = (new Uri('urn:/mailto:foo'))->withScheme(null);
+		$uri = (new Uri('urn:/mailto:foo'))->withScheme('');
 
 		expect($uri->getPath())->toBeSame('/mailto:foo');
 
-		expect(() ==> (new Uri('urn:mailto:foo'))->withScheme(null))->toThrow(
+		expect(() ==> (new Uri('urn:mailto:foo'))->withScheme(''))->toThrow(
 			\InvalidArgumentException::class,
 		);
 	}
@@ -321,15 +321,15 @@ class UriTest extends \Facebook\HackTest\HackTest {
 	public function testDefaultReturnValuesOfGetters(): void {
 		$uri = new Uri();
 
-		expect($uri->getScheme())->toBeNull();
+		expect($uri->getScheme())->toBeSame('');
 		expect($uri->getAuthority())->toBeSame('');
-		expect($uri->getHost())->toBeNull();
+		expect($uri->getHost())->toBeSame('');
 		expect($uri->getPort())->toBeNull();
-		expect($uri->getPath())->toBeNull();
-		expect($uri->getRawQuery())->toBeNull();
-		expect($uri->getFragment())->toBeNull();
+		expect($uri->getPath())->toBeSame('');
+		expect($uri->getRawQuery())->toBeSame('');
+		expect($uri->getFragment())->toBeSame('');
 		expect($uri->getUserInfo())->toBePHPEqual(
-			['user' => '', 'pass' => null],
+			['user' => '', 'pass' => ''],
 		);
 	}
 

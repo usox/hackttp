@@ -27,23 +27,23 @@ final class Uri implements UriInterface {
 
 	private static string $char_sub_delimeters = '!\$&\'\(\)\*\+,;=';
 
-	private ?string $scheme;
+	private string $scheme = '';
 
-	private ?string $user_name;
+	private string $user_name = '';
 
-	private ?string $user_password;
+	private string $user_password = '';
 
-	private ?string $host;
+	private string $host = '';
 
 	private ?int $port;
 
-	private ?string $path;
+	private string $path = '';
 
-	private ?string $raw_query;
+	private string $raw_query = '';
 
 	private dict<string, string> $query = dict[];
 
-	private ?string $fragment;
+	private string $fragment = '';
 
 	public function __construct(?string $uri = null): void {
 		if ($uri !== null) {
@@ -54,7 +54,7 @@ final class Uri implements UriInterface {
 	public function __toString(): string {
 		$uri = '';
 
-		if ($this->scheme !== null) {
+		if ($this->scheme !== '') {
 			$uri .= $this->scheme.':';
 		}
 
@@ -66,7 +66,7 @@ final class Uri implements UriInterface {
 
 		$uri .= $this->path;
 
-		if ($this->raw_query !== null) {
+		if ($this->raw_query !== '') {
 			$uri .= '?'.$this->raw_query;
 		} elseif (C\count($this->query) > 0) {
 			$uri .= Str\format(
@@ -85,14 +85,14 @@ final class Uri implements UriInterface {
 			);
 		}
 
-		if ($this->fragment !== null) {
+		if ($this->fragment !== '') {
 			$uri .= '#'.$this->fragment;
 		}
 
 		return $uri;
 	}
 
-	public function getScheme(): ?string {
+	public function getScheme(): string {
 		return $this->scheme;
 	}
 
@@ -117,17 +117,14 @@ final class Uri implements UriInterface {
 		return $authority;
 	}
 
-	public function getUserInfo(): ?shape('user' => string, 'pass' => ?string) {
-		if ($this->user_name === '') {
-			return null;
-		}
+	public function getUserInfo(): shape('user' => string, 'pass' => string) {
 		return shape(
-			'user' => (string)$this->user_name,
+			'user' => $this->user_name,
 			'pass' => $this->user_password,
 		);
 	}
 
-	public function getHost(): ?string {
+	public function getHost(): string {
 		return $this->host;
 	}
 
@@ -135,11 +132,11 @@ final class Uri implements UriInterface {
 		return $this->port;
 	}
 
-	public function getPath(): ?string {
+	public function getPath(): string {
 		return $this->path;
 	}
 
-	public function getRawQuery(): ?string {
+	public function getRawQuery(): string {
 		return $this->raw_query;
 	}
 
@@ -147,11 +144,11 @@ final class Uri implements UriInterface {
 		return $this->query;
 	}
 
-	public function getFragment(): ?string {
+	public function getFragment(): string {
 		return $this->fragment;
 	}
 
-	public function withScheme(?string $scheme): this {
+	public function withScheme(string $scheme): this {
 		$scheme = $this->filterScheme($scheme);
 
 		if ($this->scheme === $scheme) {
@@ -167,8 +164,8 @@ final class Uri implements UriInterface {
 	}
 
 	public function withUserInfo(
-		?string $user,
-		?string $password = null,
+		string $user,
+		string $password,
 	): this {
 		if ($this->user_name === $user && $this->user_password === $password) {
 			return $this;
@@ -182,7 +179,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withHost(?string $host = null): this {
+	public function withHost(string $host): this {
 		$host = $this->filterHost($host);
 
 		if ($this->host === $host) {
@@ -211,7 +208,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withPath(?string $path = null): this {
+	public function withPath(string $path): this {
 		$path = $this->filterPath($path);
 
 		if ($this->path === $path) {
@@ -249,7 +246,7 @@ final class Uri implements UriInterface {
 		return $new;
 	}
 
-	public function withFragment(?string $fragment = null): this {
+	public function withFragment(string $fragment): this {
 		$fragment = $this->filterQueryAndFragment($fragment);
 
 		if ($this->fragment === $fragment) {
@@ -268,24 +265,24 @@ final class Uri implements UriInterface {
 			throw new \InvalidArgumentException("Unable to parse URI: $uri");
 		}
 		if (C\contains_key($parts, 'scheme')) {
-			$this->scheme = $this->filterScheme((string)$parts['scheme']);
+			$this->scheme = $this->filterScheme((string)$parts['scheme']) ?? '';
 		}
 		if (C\contains_key($parts, 'host')) {
-			$this->host = $this->filterHost((string)$parts['host']);
+			$this->host = $this->filterHost((string)$parts['host']) ?? '';
 		}
 		if (C\contains_key($parts, 'port') && $parts['port'] !== null) {
 			$this->port = $this->filterPort((int)$parts['port']);
 		}
 		if (C\contains_key($parts, 'path')) {
-			$this->path = $this->filterPath((string)$parts['path']);
+			$this->path = $this->filterPath((string)$parts['path']) ?? '';
 		}
 		if (C\contains_key($parts, 'query')) {
 			$this->raw_query =
-				$this->filterQueryAndFragment((string)$parts['query']);
+				$this->filterQueryAndFragment((string)$parts['query']) ?? '';
 		}
 		if (C\contains_key($parts, 'fragment')) {
 			$this->fragment =
-				$this->filterQueryAndFragment((string)$parts['fragment']);
+				$this->filterQueryAndFragment((string)$parts['fragment']) ?? '';
 		}
 		if (C\contains_key($parts, 'user')) {
 			$this->user_name = (string)$parts['user'];
@@ -297,17 +294,11 @@ final class Uri implements UriInterface {
 		$this->removeDefaultPort();
 	}
 
-	private function filterScheme(?string $scheme): ?string {
-		if ($scheme === null) {
-			return null;
-		}
+	private function filterScheme(string $scheme): string {
 		return Str\lowercase($scheme);
 	}
 
-	private function filterHost(?string $host): ?string {
-		if ($host === null) {
-			return null;
-		}
+	private function filterHost(string $host): string {
 		return Str\lowercase($host);
 	}
 
@@ -340,10 +331,7 @@ final class Uri implements UriInterface {
 		}
 	}
 
-	private function filterPath(?string $path): ?string {
-		if ($path === null) {
-			return null;
-		}
+	private function filterPath(string $path): string {
 		return \preg_replace_callback(
 			'/(?:[^'.
 			static::$char_unreserved.
@@ -356,10 +344,7 @@ final class Uri implements UriInterface {
 		);
 	}
 
-	private function filterQueryAndFragment(?string $str): ?string {
-		if ($str === null) {
-			return null;
-		}
+	private function filterQueryAndFragment(string $str): string {
 		return \preg_replace_callback(
 			'/(?:[^'.
 			static::$char_unreserved.
@@ -374,7 +359,7 @@ final class Uri implements UriInterface {
 
 	private function validateState(): void {
 		if (
-			$this->host === null &&
+			$this->host === '' &&
 			($this->scheme === 'http' || $this->scheme === 'https')
 		) {
 			$this->host = static::HTTP_DEFAULT_HOST;
@@ -388,7 +373,7 @@ final class Uri implements UriInterface {
 				);
 			}
 			if (
-				$this->scheme === null &&
+				$this->scheme === '' &&
 				null !== Str\search(\explode('/', $path, 2)[0], ':')
 			) {
 				throw new \InvalidArgumentException(

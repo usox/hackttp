@@ -10,9 +10,9 @@ final class UploadedStreamFactory implements UploadedFileFactoryInterface {
     public function createUploadedFile(
         Message\StreamInterface $stream,
         int $size = 0,
-        int $error = \UPLOAD_ERR_OK,
-        ?string $client_filename = null,
-        ?string $client_media_type = null
+        ?Message\UploadedFileError $error = null,
+        string $client_filename = '',
+        string $client_media_type = ''
     ): Message\UploadedFileInterface {
         return new UploadedStream(
             $stream,

@@ -6,7 +6,7 @@ use namespace Facebook\TypeSpec;
 use type Facebook\Experimental\Http\Message\HTTPMethod;
 use type Facebook\Experimental\Http\Message\ServerParamInterface;
 
-abstract class AbstractServerParam implements ServerParamInterface {
+abstract class AbstractServerParam {
 
     protected dict<string, mixed> $params = dict[];
 
