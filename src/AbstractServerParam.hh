@@ -4,7 +4,6 @@ namespace Usox\HackTTP;
 
 use namespace Facebook\TypeSpec;
 use type Facebook\Experimental\Http\Message\HTTPMethod;
-use type Facebook\Experimental\Http\Message\ServerParamInterface;
 
 abstract class AbstractServerParam {
 

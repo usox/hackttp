@@ -3,7 +3,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{C, Dict, Str};
+use namespace HH\Lib\{C, Dict};
 
 class Request implements Message\RequestInterface {
 
@@ -37,7 +37,7 @@ class Request implements Message\RequestInterface {
     }
 
     $raw_query = $this->uri->getRawQuery();
-    if ($raw_query != '') {
+    if ($raw_query !== '') {
       $target .= '?'.$raw_query;
     }
     return $target;
