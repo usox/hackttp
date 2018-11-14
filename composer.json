@@ -29,9 +29,6 @@
 			"Usox\\HackTTP\\": "src/"
 		}
 	},
-	"repositories": [
-		{ "type": "vcs", "url": "https://github.com/facebookexperimental/hack-http-request-response-interfaces.git" }
-	],
 	"scripts": {
 		"tests": "env hhvm vendor/bin/hacktest tests"
 	}
