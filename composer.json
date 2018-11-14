@@ -18,7 +18,7 @@
 		"hhvm/hsl": "^3.29",
 		"hhvm/hsl-experimental": "^3.29",
 		"hhvm/type-assert": "^3.2",
-		"usox/hack-http-factory-interfaces": "dev-master"
+		"usox/hack-http-factory-interfaces": "0.1.0"
 	},
 	"require-dev": {
 		"usox/hackmock": "^1",
