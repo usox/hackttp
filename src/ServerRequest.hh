@@ -72,7 +72,7 @@ final class ServerRequest
   }
 
   public function getParsedBody(): dict<string, string> {
-    $method = $this->server_params['REQUEST_METHOD'] ?? null;
+    $method = $this->server_params['REQUEST_METHOD'] ?? $this->getMethod();
     $content_type = $this->server_params['CONTENT_TYPE'] ?? null;
     if (
       $method === Message\HTTPMethod::POST &&
@@ -108,7 +108,7 @@ final class ServerRequest
     $cookies = dict($_COOKIE);
 
     $request = new ServerRequest(
-      Message\HTTPMethod::assert($get_vars['REQUEST_METHOD'] ?? Message\HTTPMethod::GET),
+      Message\HTTPMethod::assert($server_params['REQUEST_METHOD'] ?? Message\HTTPMethod::GET),
       new Uri($server_params['REQUEST_URI'] ?? null),
       $server_params
     );
