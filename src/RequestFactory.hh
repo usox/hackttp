@@ -2,6 +2,7 @@
 
 namespace Usox\HackTTP;
 
+use namespace HH\Lib\Experimental\IO;
 use namespace Facebook\Experimental\Http\Message;
 use type Usox\HackHttpFactory\RequestFactoryInterface;
 
@@ -11,6 +12,11 @@ final class RequestFactory implements RequestFactoryInterface {
     Message\HTTPMethod $method,
     Message\UriInterface $uri,
   ): Message\RequestInterface {
-    return new Request($method, $uri, dict[]);
+    return new Request(
+      $method,
+      $uri,
+      IO\stdin(),
+      dict[]
+    );
   }
 }

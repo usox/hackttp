@@ -118,18 +118,6 @@ class MessageTraitTest extends HackTest {
       ->toBeSame(dict[]);
   }
 
-  public function testGetBodyThrowsExceptionOnMissingBody(): void {
-    expect(() ==> $this->createImplementation()->getBody())
-      ->toThrow(\InvalidArgumentException::class, 'No body available');
-  }
-
-  public function testWithBodyReturnsSetBody(): void {
-    $body = 'some-body';
-
-    expect($this->createImplementation()->withBody($body)->getBody())
-      ->toBeSame($body);
-  }
-
   private function createImplementation(): MessageTraitImplementation {
     return new MessageTraitImplementation();
   }

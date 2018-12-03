@@ -3,7 +3,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\C;
+use namespace HH\Lib\{C, Experimental\IO};
 
 class Response implements Message\ResponseInterface {
 
@@ -73,14 +73,12 @@ class Response implements Message\ResponseInterface {
   private string $reason_phrase = '';
 
   public function __construct(
+    private IO\WriteHandle $body,
     private int $status_code = 200,
     string $reason = '',
     dict<string, vec<string>> $headers = dict[],
-    ?string $body = null,
     private string $protocol_version = '1.1',
   ) {
-    $this->body = $body;
-
     $this->setHeaders($headers);
 
     $this->reason_phrase = $this->getReason($status_code, $reason);
@@ -98,6 +96,22 @@ class Response implements Message\ResponseInterface {
     $new = clone $this;
     $new->status_code = $code;
     $new->reason_phrase = $this->getReason($code, $reason_phrase);
+
+    return $new;
+  }
+
+  public function getBody(): IO\WriteHandle {
+    return $this->body;
+  }
+
+  public function withBody(
+    IO\WriteHandle $body
+  ): this {
+    if ($body === $this->body) {
+      return $this;
+    }
+    $new = clone $this;
+    $new->body = $body;
 
     return $new;
   }

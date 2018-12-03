@@ -2,6 +2,7 @@
 
 namespace Usox\HackTTP;
 
+use HH\Lib\Experimental\IO;
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
 use function Usox\HackMock\{mock, prospect};
@@ -21,7 +22,8 @@ class ServerRequestTest extends HackTest {
     $server_request = new ServerRequest(
       Message\HTTPMethod::GET,
       $uri,
-      $server_params
+      $server_params,
+      mock(IO\ReadHandle::class)
     );
 
     expect($server_request->getServerParams())
@@ -41,7 +43,8 @@ class ServerRequestTest extends HackTest {
     $server_request = (new ServerRequest(
       Message\HTTPMethod::GET,
       $uri,
-      $server_params
+      $server_params,
+      mock(IO\ReadHandle::class),
     ))->withServerParams($server_params_new);
 
     expect($server_request->getServerParams())
@@ -58,7 +61,8 @@ class ServerRequestTest extends HackTest {
     $server_request = new ServerRequest(
       Message\HTTPMethod::GET,
       $uri,
-      dict[]
+      dict[],
+      mock(IO\ReadHandle::class),
     );
 
     expect($server_request->getCookieParams())
@@ -77,7 +81,8 @@ class ServerRequestTest extends HackTest {
     $server_request = (new ServerRequest(
       Message\HTTPMethod::GET,
       $uri,
-      dict[]
+      dict[],
+      mock(IO\ReadHandle::class),
     ))->withCookieParams($cookie_params);
 
     expect($server_request->getCookieParams())
@@ -94,7 +99,8 @@ class ServerRequestTest extends HackTest {
     $server_request = new ServerRequest(
       Message\HTTPMethod::GET,
       $uri,
-      dict[]
+      dict[],
+      mock(IO\ReadHandle::class),
     );
 
     expect($server_request->getQueryParams())
@@ -113,7 +119,8 @@ class ServerRequestTest extends HackTest {
     $server_request = (new ServerRequest(
       Message\HTTPMethod::GET,
       $uri,
-      dict[]
+      dict[],
+      mock(IO\ReadHandle::class),
     ))->withQueryParams($query_params);
 
     expect($server_request->getQueryParams())
@@ -130,7 +137,8 @@ class ServerRequestTest extends HackTest {
     $server_request = new ServerRequest(
       Message\HTTPMethod::GET,
       $uri,
-      dict[]
+      dict[],
+      mock(IO\ReadHandle::class),
     );
 
     expect($server_request->getUploadedFiles())
@@ -149,7 +157,8 @@ class ServerRequestTest extends HackTest {
     $server_request = (new ServerRequest(
       Message\HTTPMethod::GET,
       $uri,
-      dict[]
+      dict[],
+      mock(IO\ReadHandle::class),
     ))->withUploadedFiles($uploaded_files);
 
     expect($server_request->getUploadedFiles())
@@ -166,7 +175,8 @@ class ServerRequestTest extends HackTest {
     $server_request = (new ServerRequest(
       Message\HTTPMethod::GET,
       $uri,
-      dict[]
+      dict[],
+      mock(IO\ReadHandle::class),
     ))->withParsedBody(dict['some' => 'body']);
 
     expect($server_request->getParsedBody())
@@ -183,7 +193,8 @@ class ServerRequestTest extends HackTest {
     $server_request = (new ServerRequest(
       Message\HTTPMethod::POST,
       $uri,
-      dict[]
+      dict[],
+      mock(IO\ReadHandle::class),
     ))->withParsedBody(dict['some' => 'body']);
 
     expect($server_request->getParsedBody())
@@ -203,6 +214,7 @@ class ServerRequestTest extends HackTest {
       Message\HTTPMethod::POST,
       $uri,
       dict['CONTENT_TYPE' => 'multipart/form-data'],
+      mock(IO\ReadHandle::class),
     ))->withParsedBody($body);
 
     expect($server_request->getParsedBody())
@@ -222,6 +234,7 @@ class ServerRequestTest extends HackTest {
       Message\HTTPMethod::POST,
       $uri,
       dict['CONTENT_TYPE' => 'application/x-www-form-urlencoded'],
+      mock(IO\ReadHandle::class),
     ))->withParsedBody($body);
 
     expect($server_request->getParsedBody())

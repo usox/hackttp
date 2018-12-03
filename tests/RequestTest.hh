@@ -5,7 +5,7 @@ namespace Usox\HackTTP;
 use namespace Facebook\Experimental\Http\Message;
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
-use namespace HH\Lib\{Str, Vec};
+use namespace HH\Lib\{Experimental\IO, Str, Vec};
 use function Usox\HackMock\{mock, prospect};
 
 class RequestTest extends HackTest {
@@ -24,8 +24,12 @@ class RequestTest extends HackTest {
       ->times(1)
       ->andReturn($raw_query);
 
-    $request =
-      new Request(Message\HTTPMethod::GET, $uri, dict['host' => vec[]]);
+    $request = new Request(
+      Message\HTTPMethod::GET,
+      $uri,
+      mock(IO\ReadHandle::class),
+      dict['host' => vec[]]
+    );
 
     expect($request->getRequestTarget())
       ->toBeSame($result);
@@ -37,6 +41,7 @@ class RequestTest extends HackTest {
     $request = new Request(
       Message\HTTPMethod::GET,
       mock(Message\UriInterface::class),
+      mock(IO\ReadHandle::class),
       dict['host' => vec[]],
     );
 
@@ -48,6 +53,7 @@ class RequestTest extends HackTest {
     $request = new Request(
       Message\HTTPMethod::GET,
       mock(Message\UriInterface::class),
+      mock(IO\ReadHandle::class),
       dict['host' => vec[]],
     );
 
@@ -59,6 +65,7 @@ class RequestTest extends HackTest {
     $request = new Request(
       Message\HTTPMethod::GET,
       mock(Message\UriInterface::class),
+      mock(IO\ReadHandle::class),
       dict['host' => vec[]],
     );
 
@@ -69,8 +76,12 @@ class RequestTest extends HackTest {
   public function testGetUriReturnsUri(): void {
     $uri = mock(Message\UriInterface::class);
 
-    $request =
-      new Request(Message\HTTPMethod::GET, $uri, dict['host' => vec[]]);
+    $request = new Request(
+      Message\HTTPMethod::GET,
+      $uri,
+      mock(IO\ReadHandle::class),
+      dict['host' => vec[]]
+    );
 
     expect($request->getUri())
       ->toBeSame($uri);
@@ -94,6 +105,7 @@ class RequestTest extends HackTest {
     $request = new Request(
       Message\HTTPMethod::GET,
       mock(Message\UriInterface::class),
+      mock(IO\ReadHandle::class),
       dict[
         'host' => vec[],
         $sample_header => $sample_header_values,

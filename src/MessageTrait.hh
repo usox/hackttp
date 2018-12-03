@@ -2,7 +2,7 @@
 
 namespace Usox\HackTTP;
 
-use namespace HH\Lib\{C, Dict, Str, Vec};
+use namespace HH\Lib\{C, Experimental\IO, Dict, Str, Vec};
 
 trait MessageTrait {
 
@@ -11,8 +11,6 @@ trait MessageTrait {
   private dict<string, string> $header_names = dict[];
 
   private string $protocol_version = '1.1';
-
-  private ?string $body;
 
   public function getProtocolVersion(): string {
     return $this->protocol_version;
@@ -103,24 +101,6 @@ trait MessageTrait {
     $new = clone $this;
     $new->headers = dict[];
     $new->header_names = dict[];
-
-    return $new;
-  }
-
-  public function getBody(): string {
-    if ($this->body === null) {
-      // This is subject to change, maybe we use some kind of dummy stream
-      throw new \InvalidArgumentException('No body available');
-    }
-    return $this->body;
-  }
-
-  public function withBody(string $body): this {
-    if ($body === $this->body) {
-      return $this;
-    }
-    $new = clone $this;
-    $new->body = $body;
 
     return $new;
   }

@@ -2,6 +2,7 @@
 
 namespace Usox\HackTTP;
 
+use HH\Lib\Experimental\IO;
 use namespace Facebook\Experimental\Http\Message;
 
 final class ServerRequest
@@ -20,8 +21,9 @@ final class ServerRequest
     Message\HTTPMethod $method,
     Message\UriInterface $uri,
     private dict<string, string> $server_params,
+    IO\ReadHandle $body,
   ) {
-    parent::__construct($method, $uri);
+    parent::__construct($method, $uri, $body);
   }
 
   public function getServerParams(): dict<string, string> {
@@ -110,7 +112,8 @@ final class ServerRequest
     $request = new ServerRequest(
       Message\HTTPMethod::assert($server_params['REQUEST_METHOD'] ?? Message\HTTPMethod::GET),
       new Uri($server_params['REQUEST_URI'] ?? null),
-      $server_params
+      $server_params,
+      IO\stdin(),
     );
 
     return $request->withParsedBody($post_vars)

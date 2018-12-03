@@ -3,7 +3,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{Str};
+use namespace HH\Lib\{Experimental\IO, Str};
 
 final class UploadedFile implements Message\UploadedFileInterface {
 
@@ -12,6 +12,7 @@ final class UploadedFile implements Message\UploadedFileInterface {
   private bool $moved = false;
 
   public function __construct(
+    private IO\ReadHandle $stream,
     private int $size,
     private ?Message\UploadedFileError $upload_status = null,
     private string $client_filename = '',
@@ -48,5 +49,9 @@ final class UploadedFile implements Message\UploadedFileInterface {
 
   public function getClientMediaType(): string {
     return $this->client_media_type;
+  }
+
+  public function getStream(): IO\ReadHandle {
+    return $this->stream;
   }
 }

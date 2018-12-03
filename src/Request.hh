@@ -3,7 +3,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{C, Dict};
+use namespace HH\Lib\{C, Experimental\IO, Dict};
 
 class Request implements Message\RequestInterface {
 
@@ -14,8 +14,8 @@ class Request implements Message\RequestInterface {
   public function __construct(
     private Message\HTTPMethod $method,
     private Message\UriInterface $uri,
+    private IO\ReadHandle $body,
     dict<string, vec<string>> $headers = dict[],
-    ?string $body = null,
     string $version = '1.1',
   ) {
     $this->setHeaders($headers);
@@ -23,8 +23,6 @@ class Request implements Message\RequestInterface {
     if (!$this->hasHeader('Host')) {
       $this->updateHostFromUri();
     }
-
-    $this->body = $body;
   }
 
   public function getRequestTarget(): string {
@@ -82,6 +80,22 @@ class Request implements Message\RequestInterface {
     if ($options['preserveHost'] === false) {
       $new->updateHostFromUri();
     }
+    return $new;
+  }
+
+  public function getBody(): IO\ReadHandle {
+    return $this->body;
+  }
+
+  public function withBody(
+    IO\ReadHandle $body
+  ): this {
+    if ($body === $this->body) {
+      return $this;
+    }
+    $new = clone $this;
+    $new->body = $body;
+
     return $new;
   }
 
