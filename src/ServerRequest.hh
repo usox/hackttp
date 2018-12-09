@@ -2,7 +2,7 @@
 
 namespace Usox\HackTTP;
 
-use HH\Lib\Experimental\IO;
+use namespace HH\Lib\Experimental\IO;
 use namespace Facebook\Experimental\Http\Message;
 
 final class ServerRequest
@@ -74,18 +74,7 @@ final class ServerRequest
   }
 
   public function getParsedBody(): dict<string, string> {
-    $method = $this->server_params['REQUEST_METHOD'] ?? $this->getMethod();
-    $content_type = $this->server_params['CONTENT_TYPE'] ?? null;
-    if (
-      $method === Message\HTTPMethod::POST &&
-      (
-        $content_type === 'application/x-www-form-urlencoded' ||
-        $content_type === 'multipart/form-data'
-      )
-    ) {
       return $this->post_body;
-    }
-    return dict[];
   }
 
   public function withParsedBody(dict<string, string> $data): this {

@@ -165,42 +165,6 @@ class ServerRequestTest extends HackTest {
       ->toBeSame($uploaded_files);
   }
 
-  public function testGetParsedBodyDoesntReturnBodyIfMethodIsGet(): void {
-    $uri = mock(Message\UriInterface::class);
-
-    prospect($uri, 'getHost')
-      ->once()
-      ->andReturn(null);
-
-    $server_request = (new ServerRequest(
-      Message\HTTPMethod::GET,
-      $uri,
-      dict[],
-      mock(IO\ReadHandle::class),
-    ))->withParsedBody(dict['some' => 'body']);
-
-    expect($server_request->getParsedBody())
-      ->toBeSame(dict[]);
-  }
-
-  public function testGetParsedBodyDoesntReturnBodyIfMethodIsPostAndHeaderRequirementsNotMet(): void {
-    $uri = mock(Message\UriInterface::class);
-
-    prospect($uri, 'getHost')
-      ->once()
-      ->andReturn(null);
-
-    $server_request = (new ServerRequest(
-      Message\HTTPMethod::POST,
-      $uri,
-      dict[],
-      mock(IO\ReadHandle::class),
-    ))->withParsedBody(dict['some' => 'body']);
-
-    expect($server_request->getParsedBody())
-      ->toBeSame(dict[]);
-  }
-
   public function testGetParsedBodyReturnsBodyWithFormUrlEncoded(): void {
     $uri = mock(Message\UriInterface::class);
 
