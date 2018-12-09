@@ -2,8 +2,8 @@
 
 namespace Usox\HackTTP;
 
-use Facebook\Experimental\Http\Message\UriInterface;
-use HH\Lib\{C, Dict, Str};
+use type Facebook\Experimental\Http\Message\UriInterface;
+use namespace HH\Lib\{C, Dict, Str};
 
 final class Uri implements UriInterface {
 

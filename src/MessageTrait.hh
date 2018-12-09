@@ -2,7 +2,7 @@
 
 namespace Usox\HackTTP;
 
-use namespace HH\Lib\{C, Experimental\IO, Dict, Str, Vec};
+use namespace HH\Lib\{C, Dict, Str, Vec};
 
 trait MessageTrait {
 
