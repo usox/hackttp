@@ -15,8 +15,8 @@
 	"require": {
 		"hhvm": "^3.29",
 		"facebook/hack-http-request-response-interfaces": "0.1",
-		"hhvm/hsl": "^3.29",
-		"hhvm/hsl-experimental": "^3.29",
+		"hhvm/hsl": "dev-master",
+		"hhvm/hsl-experimental": "^3.29.3",
 		"hhvm/type-assert": "^3.2",
 		"usox/hack-http-factory-interfaces": "^0.1"
 	},

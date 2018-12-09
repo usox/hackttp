@@ -17,7 +17,7 @@ final class ServerRequestFactory implements ServerRequestFactoryInterface {
       $method,
       $uri,
       $server_params,
-      IO\stdin()
+      IO\server_input()
     );
   }
 }

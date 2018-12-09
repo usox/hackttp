@@ -113,7 +113,7 @@ final class ServerRequest
       Message\HTTPMethod::assert($server_params['REQUEST_METHOD'] ?? Message\HTTPMethod::GET),
       new Uri($server_params['REQUEST_URI'] ?? null),
       $server_params,
-      IO\stdin(),
+      IO\server_input()
     );
 
     return $request->withParsedBody($post_vars)

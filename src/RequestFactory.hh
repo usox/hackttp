@@ -15,7 +15,7 @@ final class RequestFactory implements RequestFactoryInterface {
     return new Request(
       $method,
       $uri,
-      IO\stdin(),
+      IO\server_input(),
       dict[]
     );
   }
