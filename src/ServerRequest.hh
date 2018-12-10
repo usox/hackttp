@@ -107,6 +107,7 @@ final class ServerRequest
 
     return $request->withParsedBody($post_vars)
       ->withCookieParams($cookies)
-      ->withQueryParams($get_vars);
+      ->withQueryParams($get_vars)
+      ->withUploadedFiles(Marshaler\UploadedFileMarshaler::batchMarshalPhpFilesArray());
   }
 }

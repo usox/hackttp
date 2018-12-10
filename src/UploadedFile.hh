@@ -3,7 +3,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{Experimental\IO};
+use namespace HH\Lib\{Experimental\IO, Experimental\Filesystem, Str};
 
 final class UploadedFile implements Message\UploadedFileInterface {
 
@@ -13,7 +13,7 @@ final class UploadedFile implements Message\UploadedFileInterface {
 
   public function __construct(
     private IO\ReadHandle $stream,
-    private int $size,
+    private ?int $size,
     private ?Message\UploadedFileError $upload_status = null,
     private string $client_filename = '',
     private string $client_media_type = '',
@@ -32,10 +32,24 @@ final class UploadedFile implements Message\UploadedFileInterface {
   }
 
   public function moveTo(string $target_path): void {
+    $this->validateActive();
+    if (Str\length($target_path) === 0) {
+      throw new \InvalidArgumentException(
+        'Invalid path provided for move operation; must be a non-empty string',
+      );
+    }
+    \HH\Asio\join($this->write($target_path));
 
+    $this->moved = true;
   }
 
-  public function getSize(): int {
+  private async function write(string $target_path): Awaitable<void> {
+    await using $target = Filesystem\open_write_only($target_path);
+    await $target->writeAsync($this->stream->rawReadBlocking());
+    await $this->stream->closeAsync();
+  }
+
+  public function getSize(): ?int {
     return $this->size;
   }
 
