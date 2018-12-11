@@ -83,31 +83,4 @@ final class ServerRequest
 
     return $server_request;
   }
-
-  /**
-   * We still have to rely on good old php's super globals, so provide a
-   * nice convenience method for all the users out there
-   */
-  public static function createFromGlobals(): Message\ServerRequestInterface {
-    /* HH_FIXME[2050] */
-    $server_params = dict($_SERVER);
-    /* HH_FIXME[2050] */
-    $post_vars = dict($_POST);
-    /* HH_FIXME[2050] */
-    $get_vars = dict($_GET);
-    /* HH_FIXME[2050] */
-    $cookies = dict($_COOKIE);
-
-    $request = new ServerRequest(
-      Message\HTTPMethod::assert($server_params['REQUEST_METHOD'] ?? Message\HTTPMethod::GET),
-      new Uri($server_params['REQUEST_URI'] ?? null),
-      $server_params,
-      IO\request_input()
-    );
-
-    return $request->withParsedBody($post_vars)
-      ->withCookieParams($cookies)
-      ->withQueryParams($get_vars)
-      ->withUploadedFiles(Marshaler\UploadedFileMarshaler::batchMarshalPhpFilesArray());
-  }
 }

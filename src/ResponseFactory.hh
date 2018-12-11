@@ -13,7 +13,7 @@ final class ResponseFactory implements ResponseFactoryInterface {
     string $phrase = '',
   ): Message\ResponseInterface {
     return new Response(
-      IO\server_output(),
+      IO\request_output(),
       $code,
       $phrase
     );
