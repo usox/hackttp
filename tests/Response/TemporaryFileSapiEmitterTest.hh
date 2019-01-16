@@ -18,7 +18,7 @@ class TemporaryFileSapiEmitterTest extends HackTest {
 		$resaon = 'I\'m in the honeypot';
 		$header_key = 'some-header';
 		$header_value = 'some-header-value';
-		$body_value = 'some-body-value';
+		$body_value = '';
 		$path = \sys_get_temp_dir().'/'.\bin2hex(\random_bytes(16));
 
 		\file_put_contents($path, $body_value);
