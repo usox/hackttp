@@ -57,7 +57,7 @@ class FunctionsTest extends HackTest {
 
     expect($respone->getStatusCode())
       ->toBeSame($code);
-    
+
     expect($respone->getReasonPhrase())
       ->toBeSame($reason);
   }

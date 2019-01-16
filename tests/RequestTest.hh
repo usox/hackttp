@@ -5,7 +5,7 @@ namespace Usox\HackTTP;
 use namespace Facebook\Experimental\Http\Message;
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
-use namespace HH\Lib\{Experimental\IO, Str, Vec};
+use namespace HH\Lib\{Experimental\IO, Str};
 use function Usox\HackMock\{mock, prospect};
 
 class RequestTest extends HackTest {
