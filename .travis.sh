@@ -15,5 +15,5 @@ hh_client
 
 hhvm vendor/bin/hacktest tests
 if !(hhvm --version | grep -q -- -dev); then
-  hhvm vendor/bin/hhast-lint
+  #hhvm vendor/bin/hhast-lint
 fi
