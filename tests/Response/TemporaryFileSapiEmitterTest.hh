@@ -4,8 +4,7 @@ namespace Usox\HackTTP\Response;
 
 use namespace Facebook\Experimental\Http\Message;
 use type Facebook\HackTest\HackTest;
-use function Facebook\FBExpect\expect;
-use namespace HH\Lib\{Experimental\Filesystem, Experimental\IO, Str};
+use namespace HH\Lib\Experimental\Filesystem;
 use function Usox\HackMock\{mock, prospect};
 
 class TemporaryFileSapiEmitterTest extends HackTest {

@@ -2,7 +2,7 @@
 
 namespace Usox\HackTTP\Marshaler;
 
-use Facebook\Experimental\Http\Message;
+use namespace Facebook\Experimental\Http\Message;
 
 interface UploadedFileMarshalerInterface {
 

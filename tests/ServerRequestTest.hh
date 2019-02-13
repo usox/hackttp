@@ -2,7 +2,7 @@
 
 namespace Usox\HackTTP;
 
-use HH\Lib\Experimental\IO;
+use namespace HH\Lib\Experimental\IO;
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
 use function Usox\HackMock\{mock, prospect};

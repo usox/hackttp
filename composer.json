@@ -13,16 +13,16 @@
 		}
 	],
 	"require": {
-		"hhvm": "^3.30",
-		"facebook/hack-http-request-response-interfaces": "^0.1",
-		"hhvm/hsl": "^3.30",
-		"hhvm/hsl-experimental": "^3.30",
+		"hhvm": "^4.0",
+		"facebook/hack-http-request-response-interfaces": "^0.2",
+		"hhvm/hsl": "^4.0",
+		"hhvm/hsl-experimental": "^4.0",
 		"hhvm/type-assert": "^3.2",
-		"usox/hack-http-factory-interfaces": "^0.1"
+		"usox/hack-http-factory-interfaces": "^0.2"
 	},
 	"require-dev": {
-		"usox/hackmock": "^1",
-		"hhvm/hhast": "^3.30"
+		"usox/hackmock": "^1.2",
+		"hhvm/hhast": "^4.0"
 	},
 	"autoload": {
 		"psr-4": {
@@ -31,5 +31,10 @@
 	},
 	"scripts": {
 		"tests": "env hhvm vendor/bin/hacktest tests"
+	},
+	"config": {
+		"platform": {
+			"hhvm": "4.0.0"
+		}
 	}
 }

@@ -4,6 +4,7 @@ namespace Usox\HackTTP;
 
 use function Facebook\FBExpect\expect;
 use namespace HH\Lib\{Str};
+use type Facebook\HackTest\DataProvider;
 
 class UriDataTest extends \Facebook\HackTest\HackTest {
 

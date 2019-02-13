@@ -1,18 +1,9 @@
-language: php
 sudo: required
-dist: trusty
-group: edge
-
-php:
-  - hhvm
-  - hhvm-nightly
-
-before_script: composer install
-
-matrix:
-  allow_failures:
-  - php: hhvm-nightly
-
-
+language: generic
+services: docker
+env:
+ - HHVM_VERSION=latest
+install:
+ - docker pull hhvm/hhvm:$HHVM_VERSION
 script:
-  - composer run-script tests
+ - docker run --rm -w /var/source -v $(pwd):/var/source hhvm/hhvm:$HHVM_VERSION ./.travis.sh

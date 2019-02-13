@@ -3,7 +3,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{Experimental\IO, Experimental\Filesystem, Str};
+use namespace HH\Lib\{Experimental\IO, Experimental\Filesystem};
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
 use function Usox\HackMock\{mock, prospect};
