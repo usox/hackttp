@@ -1,4 +1,3 @@
-#!/usr/bin/env hhvm
 /*
  *  Copyright (c) 2019-present, Daniel Jakob
  *  All rights reserved.

@@ -7,8 +7,11 @@
  *
  */
 
-namespace Usox\HackTTP\Exception;
+namespace Usox\HackTTP\Response;
 
-abstract class HttpException extends \Exception {
+use type Facebook\Experimental\Http\Message\ResponseInterface;
 
+interface EmitterInterface {
+
+	public function emitAsync(ResponseInterface $response): Awaitable<void>;
 }
