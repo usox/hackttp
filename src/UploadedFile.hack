@@ -45,12 +45,12 @@ final class UploadedFile implements Message\UploadedFileInterface {
         'Invalid path provided for move operation; must be a non-empty string',
       );
     }
-    \HH\Asio\join($this->write($target_path));
+    \HH\Asio\join($this->writeAsync($target_path));
 
     $this->moved = true;
   }
 
-  private async function write(string $target_path): Awaitable<void> {
+  private async function writeAsync(string $target_path): Awaitable<void> {
     await using $target = Filesystem\open_write_only($target_path);
     await $target->writeAsync($this->stream->rawReadBlocking());
     await $this->stream->closeAsync();
