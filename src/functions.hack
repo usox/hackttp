@@ -16,7 +16,7 @@ use namespace HH\Lib\{Experimental\Filesystem, Experimental\IO};
  * We still have to rely on good old php's super globals, so provide a
  * nice convenience method for all the users out there
  */
-function createServerRequestFromGlobals(): Message\ServerRequestInterface {
+function create_server_request_from_globals(): Message\ServerRequestInterface {
 	/* HH_FIXME[2050] */
 	$server_params = dict($_SERVER);
 	/* HH_FIXME[2050] */
@@ -26,11 +26,11 @@ function createServerRequestFromGlobals(): Message\ServerRequestInterface {
 	/* HH_FIXME[2050] */
 	$cookies = dict($_COOKIE);
 
-	return createServerRequest(
+	return create_server_request(
 		Message\HTTPMethod::assert(
 			$server_params['REQUEST_METHOD'] ?? Message\HTTPMethod::GET,
 		),
-		createUri($server_params['REQUEST_URI'] ?? null),
+		create_uri($server_params['REQUEST_URI'] ?? null),
 		$server_params,
 		IO\request_input(),
 	)
@@ -42,7 +42,7 @@ function createServerRequestFromGlobals(): Message\ServerRequestInterface {
 		);
 }
 
-function createServerRequest(
+function create_server_request(
 	Message\HTTPMethod $method,
 	Message\UriInterface $uri,
 	dict<string, string> $server_params,
@@ -51,11 +51,11 @@ function createServerRequest(
 	return new ServerRequest($method, $uri, $server_params, $request_input);
 }
 
-function createUri(?string $uri = null): Message\UriInterface {
+function create_uri(?string $uri = null): Message\UriInterface {
 	return new Uri($uri);
 }
 
-function createResponse(
+function create_response(
 	int $code = 200,
 	string $reason = '',
 ): Message\ResponseInterface {
