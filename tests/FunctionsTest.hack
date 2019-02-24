@@ -31,7 +31,7 @@ class FunctionsTest extends HackTest {
     $_COOKIE = ['some' => 'cookie'];
     $_FILES = ['some-file' => ['tmp_name' => '/dev/null', 'size' => 666, 'error' => 0]];
 
-    $server_request = createServerRequestFromGlobals();
+    $server_request = create_server_request_from_globals();
 
     expect($server_request->getParsedBody())
       ->toBeSame(dict($_POST));
@@ -60,7 +60,7 @@ class FunctionsTest extends HackTest {
     $code = 666;
     $reason = 'number of the beast';
 
-    $respone = createResponse($code, $reason);
+    $respone = create_response($code, $reason);
 
     expect($respone->getStatusCode())
       ->toBeSame($code);
