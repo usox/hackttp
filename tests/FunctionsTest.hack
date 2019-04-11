@@ -18,9 +18,6 @@ class FunctionsTest extends HackTest {
     $uri = 'up/and.at?them';
 
     // Define all those (not so) fancy php super globals
-    /* HH_FIXME[2049] */
-    /* HH_FIXME[4106] */
-    global $_POST, $_GET, $_SERVER, $_COOKIE, $_FILES;
     $_POST = ['foo' => 'bar'];
     $_GET = ['foo' => 'baz'];
     $_SERVER = [

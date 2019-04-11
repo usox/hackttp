@@ -13,16 +13,16 @@
 		}
 	],
 	"require": {
-		"hhvm": "^4.0",
+		"hhvm": "^4.1",
 		"facebook/hack-http-request-response-interfaces": "^0.2",
-		"hhvm/hsl": "^4.0",
-		"hhvm/hsl-experimental": "^4.0",
-		"hhvm/type-assert": "^3.2",
+		"hhvm/hsl": "^4.1",
+		"hhvm/hsl-experimental": "^4.1",
+		"hhvm/type-assert": "^3.3",
 		"usox/hack-http-factory-interfaces": "^0.2"
 	},
 	"require-dev": {
-		"usox/hackmock": "^1.2",
-		"hhvm/hhast": "^4.0"
+		"usox/hackmock": "^1.3",
+		"hhvm/hhast": "^4.1"
 	},
 	"autoload": {
 		"psr-4": {
@@ -34,7 +34,7 @@
 	},
 	"config": {
 		"platform": {
-			"hhvm": "4.0.0"
+			"hhvm": "4.1.0"
 		}
 	}
 }

@@ -91,6 +91,7 @@ class UploadedFileTest extends HackTest {
     $read_handle = mock(IO\ReadHandle::class);
 
     prospect($read_handle, 'rawReadBlocking')
+      ->with(null)
       ->once()
       ->andReturn($content);
     prospect($read_handle, 'closeAsync')
