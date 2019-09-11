@@ -1,3 +1,5 @@
+namespace Usox\HackTTP\Example;
+
 require_once '../vendor/hh_autoload.hh';
 
 <<__EntryPoint>>
