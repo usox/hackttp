@@ -31,10 +31,5 @@
 	},
 	"scripts": {
 		"tests": "env hhvm vendor/bin/hacktest tests"
-	},
-	"config": {
-		"platform": {
-			"hhvm": "4.1.0"
-		}
 	}
 }
