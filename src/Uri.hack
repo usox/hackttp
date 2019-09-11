@@ -333,6 +333,7 @@ final class Uri implements UriInterface {
   }
 
   private function filterPath(string $path): string {
+    $_count = null;
     return \preg_replace_callback(
       '/(?:[^'.
       static::$char_unreserved.
@@ -342,10 +343,13 @@ final class Uri implements UriInterface {
         return \rawurlencode($match[0]);
       },
       $path,
+      -1,
+      inout $_count,
     );
   }
 
   private function filterQueryAndFragment(string $str): string {
+    $_count = null;
     return \preg_replace_callback(
       '/(?:[^'.
       static::$char_unreserved.
@@ -355,6 +359,8 @@ final class Uri implements UriInterface {
         return \rawurlencode($match[0]);
       },
       $str,
+      -1,
+      inout $_count,
     );
   }
 
