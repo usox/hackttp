@@ -22,7 +22,7 @@ final class RequestFactory implements RequestFactoryInterface {
     return new Request(
       $method,
       $uri,
-      IO\server_input(),
+      IO\request_input(),
       dict[]
     );
   }

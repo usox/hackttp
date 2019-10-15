@@ -75,7 +75,7 @@ final class Uri implements UriInterface {
 
     if ($this->raw_query !== '') {
       $uri .= '?'.$this->raw_query;
-    } elseif (C\count($this->query) > 0) {
+    } else if (C\count($this->query) > 0) {
       $uri .= Str\format(
         '?%s',
         Dict\map_with_key(
@@ -387,7 +387,7 @@ final class Uri implements UriInterface {
           'A relative URI must not have a path beginning with a segment containing a colon',
         );
       }
-    } elseif ($path !== '' && Str\search($path, '/') !== 0) {
+    } else if ($path !== '' && Str\search($path, '/') !== 0) {
       throw new \InvalidArgumentException(
         'The path of a URI with an authority must start with a slash "/" or be empty',
       );

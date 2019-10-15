@@ -10,7 +10,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{C, Experimental\IO, Dict};
+use namespace HH\Lib\{C, Dict, Experimental\IO};
 
 class Request implements Message\RequestInterface {
 
