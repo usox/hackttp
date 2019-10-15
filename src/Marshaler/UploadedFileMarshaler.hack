@@ -11,7 +11,7 @@ namespace Usox\HackTTP\Marshaler;
 
 use namespace Facebook\Experimental\Http\Message;
 use type Usox\HackTTP\UploadedFile;
-use namespace HH\Lib\{C, Experimental\Filesystem, Str};
+use namespace HH\Lib\{C, Experimental\File, Str};
 
 type UploadedFileType = shape(
 	'tmp_name' => string,
@@ -72,7 +72,7 @@ final class UploadedFileMarshaler implements UploadedFileMarshalerInterface {
 		$error = $file['error'] === 0 ? null : Message\UploadedFileError::assert($file['error']);
 
 		return new UploadedFile(
-			Filesystem\open_read_only_non_disposable($file['tmp_name']),
+			File\open_read_only_nd($file['tmp_name']),
 			$file['size'],
 			$error,
 			$file['name'] ?? '',

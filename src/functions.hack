@@ -10,7 +10,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{Experimental\Filesystem, Experimental\IO};
+use namespace HH\Lib\Experimental\{File, IO};
 
 /**
  * We still have to rely on good old php's super globals, so provide a
@@ -59,9 +59,9 @@ function create_response(
 	int $code = 200,
 	string $reason = '',
 ): Message\ResponseInterface {
-	$write_handle = Filesystem\open_write_only_non_disposable(
+	$write_handle = File\open_write_only_nd(
 		\sys_get_temp_dir().'/'.\bin2hex(\random_bytes(16)),
-		Filesystem\FileWriteMode::MUST_CREATE
+		File\WriteMode::MUST_CREATE
 	);
 	return new Response($write_handle, $code, $reason);
 }

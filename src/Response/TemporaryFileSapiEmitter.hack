@@ -9,7 +9,7 @@
 
 namespace Usox\HackTTP\Response;
 
-use namespace HH\Lib\{Experimental\Filesystem, Experimental\IO, Math, Str};
+use namespace HH\Lib\{Experimental\File, Experimental\IO, Math, Str};
 use type Facebook\Experimental\Http\Message\ResponseInterface;
 use type Usox\HackTTP\Exception\EmitterException;
 
@@ -37,15 +37,18 @@ final class TemporaryFileSapiEmitter implements EmitterInterface {
 		/* HH_FIXME[4053] */
 		$path = $body->getPath();
 
-		$path as Filesystem\Path;
+		$path as File\Path;
 
 		$this->writeStatusLine($response);
 		$this->writeHeaders($response);
 
 		$temporary_file_path = $path->toString();
 
-		await $body->closeAsync();
-	  await using ($read_handle = Filesystem\open_read_only($temporary_file_path)) {
+		if ($body is IO\NonDisposableHandle) {
+			await $body->closeAsync();
+		}
+
+		await using ($read_handle = File\open_read_only($temporary_file_path)) {
 			$out = IO\request_output();
 			$content = await $read_handle->readAsync(Math\INT64_MAX);
 			await $out->writeAsync($content);

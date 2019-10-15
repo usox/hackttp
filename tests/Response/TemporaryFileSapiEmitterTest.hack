@@ -11,7 +11,7 @@ namespace Usox\HackTTP\Response;
 
 use namespace Facebook\Experimental\Http\Message;
 use type Facebook\HackTest\HackTest;
-use namespace HH\Lib\Experimental\Filesystem;
+use namespace HH\Lib\Experimental\File;
 use function Usox\HackMock\{mock, prospect};
 
 class TemporaryFileSapiEmitterTest extends HackTest {
@@ -30,8 +30,8 @@ class TemporaryFileSapiEmitterTest extends HackTest {
 		\file_put_contents($path, $body_value);
 
 		$response = mock(Message\ResponseInterface::class);
-		$handle = mock(Filesystem\FileHandle::class);
-		$path_handle = mock(Filesystem\Path::class);
+		$handle = mock(File\Handle::class);
+		$path_handle = mock(File\Path::class);
 
 		prospect($handle, 'getPath')
 			->once()

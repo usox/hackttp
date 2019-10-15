@@ -10,7 +10,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{Experimental\IO, Experimental\Filesystem};
+use namespace HH\Lib\{Experimental\File, Experimental\IO};
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
 use function Usox\HackMock\{mock, prospect};
@@ -104,7 +104,7 @@ class UploadedFileTest extends HackTest {
 
     $file->moveTo($filename);
 
-    $target_file = Filesystem\open_read_only_non_disposable($filename);
+    $target_file = File\open_read_only_nd($filename);
 
     expect($target_file->rawReadBlocking())
       ->toBeSame($content);

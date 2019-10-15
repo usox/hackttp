@@ -10,7 +10,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{Experimental\IO, Experimental\Filesystem, Str};
+use namespace HH\Lib\{Experimental\File, Experimental\IO, Str};
 
 final class UploadedFile implements Message\UploadedFileInterface {
 
@@ -51,9 +51,11 @@ final class UploadedFile implements Message\UploadedFileInterface {
   }
 
   private async function writeAsync(string $target_path): Awaitable<void> {
-    await using $target = Filesystem\open_write_only($target_path);
+    await using $target = File\open_write_only($target_path);
     await $target->writeAsync($this->stream->rawReadBlocking());
-    await $this->stream->closeAsync();
+    if ($this->stream is IO\NonDisposableHandle) {
+      await $this->stream->closeAsync();
+    }
   }
 
   public function getSize(): ?int {
