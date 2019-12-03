@@ -18,15 +18,15 @@ class FunctionsTest extends HackTest {
     $uri = 'up/and.at?them';
 
     // Define all those (not so) fancy php super globals
-    $_POST = ['foo' => 'bar'];
-    $_GET = ['foo' => 'baz'];
-    $_SERVER = [
+    $_POST = darray['foo' => 'bar'];
+    $_GET = darray['foo' => 'baz'];
+    $_SERVER = darray[
       'REQUEST_URI' => $uri,
       'REQUEST_METHOD' => 'POST',
       'CONTENT_TYPE' => 'multipart/form-data',
     ];
-    $_COOKIE = ['some' => 'cookie'];
-    $_FILES = ['some-file' => ['tmp_name' => '/dev/null', 'size' => 666, 'error' => 0]];
+    $_COOKIE = darray['some' => 'cookie'];
+    $_FILES = darray['some-file' => darray['tmp_name' => '/dev/null', 'size' => 666, 'error' => 0]];
 
     $server_request = create_server_request_from_globals();
 

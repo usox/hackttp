@@ -339,7 +339,7 @@ final class Uri implements UriInterface {
       static::$char_unreserved.
       static::$char_sub_delimeters.
       '%:@\/]++|%(?![A-Fa-f0-9]{2}))/',
-      function($match) {
+      ($match) ==> {
         return \rawurlencode($match[0]);
       },
       $path,
@@ -355,7 +355,7 @@ final class Uri implements UriInterface {
       static::$char_unreserved.
       static::$char_sub_delimeters.
       '%:@\/\?]++|%(?![A-Fa-f0-9]{2}))/',
-      function($match) {
+      ($match) ==> {
         return \rawurlencode($match[0]);
       },
       $str,

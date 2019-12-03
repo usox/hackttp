@@ -22,7 +22,8 @@
 	},
 	"require-dev": {
 		"usox/hackmock": "^1.3",
-		"hhvm/hhast": "^4.1"
+    "hhvm/hhast": "^4.1",
+    "hhvm/hacktest": "^1.4|^2.0"
 	},
 	"autoload": {
 		"psr-4": {

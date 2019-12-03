@@ -115,7 +115,8 @@ class Request implements Message\RequestInterface {
     if ($host === '' || $host === null) {
       return;
     }
-    if (($port = $this->uri->getPort()) !== null) {
+    $port = $this->uri->getPort();
+    if ($port is nonnull) {
       $host .= ':'.$port;
     }
 

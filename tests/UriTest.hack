@@ -21,7 +21,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
     expect($uri->getScheme())->toBeSame('https');
     expect($uri->getAuthority())->toBeSame('user:pass@example.com:8080');
     expect($uri->getUserInfo())->toBePHPEqual(
-      ['user' => 'user', 'pass' => 'pass'],
+      shape('user' => 'user', 'pass' => 'pass'),
     );
     expect($uri->getHost())->toBeSame('example.com');
     expect($uri->getPort())->toBeSame(8080);
@@ -44,7 +44,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
     expect($uri->getScheme())->toBeSame('https');
     expect($uri->getAuthority())->toBeSame('user:pass@example.com:8080');
     expect($uri->getUserInfo())->toBePHPEqual(
-      ['user' => 'user', 'pass' => 'pass'],
+      shape('user' => 'user', 'pass' => 'pass'),
     );
     expect($uri->getHost())->toBeSame('example.com');
     expect($uri->getPort())->toBeSame(8080);
@@ -84,7 +84,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
     expect($uri->getScheme())->toBeSame('0');
     expect($uri->getAuthority())->toBeSame('0:0@0');
-    expect($uri->getUserInfo())->toBePHPEqual(['user' => '0', 'pass' => '0']);
+    expect($uri->getUserInfo())->toBePHPEqual(shape('user' => '0', 'pass' => '0'));
     expect($uri->getHost())->toBeSame('0');
     expect($uri->getPath())->toBeSame('/0');
     expect($uri->getRawQuery())->toBeSame('0');
@@ -103,7 +103,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
 
     expect($uri->getScheme())->toBeSame('0');
     expect($uri->getAuthority())->toBeSame('0:0@0');
-    expect($uri->getUserInfo())->toBePHPEqual(['user' => '0', 'pass' => '0']);
+    expect($uri->getUserInfo())->toBePHPEqual(shape('user' => '0', 'pass' => '0'));
     expect($uri->getHost())->toBeSame('0');
     expect($uri->getPath())->toBeSame('/0');
     expect($uri->getRawQuery())->toBeSame('0');
@@ -192,7 +192,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
     $uri = (new Uri())->withUserInfo('user', 'pass');
 
     expect($uri->getUserInfo())->toBePHPEqual(
-      ['user' => 'user', 'pass' => 'pass'],
+      shape('user' => 'user', 'pass' => 'pass'),
     );
     expect($uri->getAuthority())->toBeSame('user:pass@');
 
@@ -331,7 +331,7 @@ class UriTest extends \Facebook\HackTest\HackTest {
     expect($uri->getPath())->toBeSame('');
     expect($uri->getRawQuery())->toBeSame('');
     expect($uri->getFragment())->toBeSame('');
-    expect($uri->getUserInfo())->toBePHPEqual(['user' => '', 'pass' => '']);
+    expect($uri->getUserInfo())->toBePHPEqual(shape('user' => '', 'pass' => ''));
   }
 
   public function testImmutability(): void {

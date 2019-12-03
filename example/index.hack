@@ -1,16 +1,17 @@
 namespace Usox\HackTTP\Example;
 
-require_once '../vendor/hh_autoload.hh';
 
 <<__EntryPoint>>
 async function main(): Awaitable<noreturn> {
-	$response = \Usox\HackTTP\create_response(200);
+  require_once '../vendor/hh_autoload.hack';
+  \Facebook\AutoloadMap\initialize();
+  $response = \Usox\HackTTP\create_response(200);
 
-	$response = $response->withAddedHeaderLine('X-ZOMG', 'aggi');
+  $response = $response->withAddedHeaderLine('X-ZOMG', 'aggi');
 
-	await $response->getBody()->writeAsync('foo');
+  await $response->getBody()->writeAsync('foo');
 
-	$emitter = new \Usox\HackTTP\Response\TemporaryFileSapiEmitter();
-	await $emitter->emitAsync($response);
-	exit();
+  $emitter = new \Usox\HackTTP\Response\TemporaryFileSapiEmitter();
+  await $emitter->emitAsync($response);
+  exit();
 }
