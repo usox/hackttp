@@ -44,7 +44,7 @@ final class TemporaryFileSapiEmitter implements EmitterInterface {
 
 		$temporary_file_path = $path->toString();
 
-		if ($body is IO\NonDisposableHandle) {
+		if ($body is IO\CloseableHandle) {
 			await $body->closeAsync();
 		}
 

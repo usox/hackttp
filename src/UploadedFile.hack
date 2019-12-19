@@ -53,7 +53,7 @@ final class UploadedFile implements Message\UploadedFileInterface {
   private async function writeAsync(string $target_path): Awaitable<void> {
     await using $target = File\open_write_only($target_path);
     await $target->writeAsync($this->stream->rawReadBlocking());
-    if ($this->stream is IO\NonDisposableHandle) {
+    if ($this->stream is IO\CloseableHandle) {
       await $this->stream->closeAsync();
     }
   }
