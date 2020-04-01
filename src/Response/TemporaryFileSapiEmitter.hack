@@ -9,7 +9,7 @@
 
 namespace Usox\HackTTP\Response;
 
-use namespace HH\Lib\{Experimental\File, Experimental\IO, Math, Str};
+use namespace HH\Lib\{File, IO, Math, Str};
 use type Facebook\Experimental\Http\Message\ResponseInterface;
 use type Usox\HackTTP\Exception\EmitterException;
 

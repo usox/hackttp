@@ -9,7 +9,7 @@
 
 namespace Usox\HackTTP;
 
-use namespace HH\Lib\Experimental\IO;
+use namespace HH\Lib\IO;
 use namespace Facebook\Experimental\Http\Message;
 use type Usox\HackHttpFactory\ServerRequestFactoryInterface;
 

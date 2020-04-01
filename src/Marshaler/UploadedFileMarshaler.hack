@@ -11,7 +11,7 @@ namespace Usox\HackTTP\Marshaler;
 
 use namespace Facebook\Experimental\Http\Message;
 use type Usox\HackTTP\UploadedFile;
-use namespace HH\Lib\{C, Experimental\File, Str};
+use namespace HH\Lib\{C, File, Str};
 
 type UploadedFileType = shape(
 	'tmp_name' => string,

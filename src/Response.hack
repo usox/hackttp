@@ -10,7 +10,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{C, Experimental\IO};
+use namespace HH\Lib\{C, IO};
 
 class Response implements Message\ResponseInterface {
 

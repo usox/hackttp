@@ -11,7 +11,7 @@ namespace Usox\HackTTP\Response;
 
 use namespace Facebook\Experimental\Http\Message;
 use type Facebook\HackTest\HackTest;
-use namespace HH\Lib\Experimental\File;
+use namespace HH\Lib\File;
 use function Usox\HackMock\{mock, prospect};
 
 class TemporaryFileSapiEmitterTest extends HackTest {

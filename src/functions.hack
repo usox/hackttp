@@ -10,7 +10,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\Experimental\{File, IO};
+use namespace HH\Lib\{File, IO};
 
 /**
  * We still have to rely on good old php's super globals, so provide a
