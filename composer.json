@@ -14,9 +14,9 @@
 	],
 	"require": {
 		"hhvm": "^4.1",
-		"facebook/hack-http-request-response-interfaces": "^0.2",
+		"facebook/hack-http-request-response-interfaces": "^0.3",
 		"hhvm/hsl": "^4.25",
-		"hhvm/hsl-experimental": "^4.37",
+		"hhvm/hsl-experimental": "^4.50",
 		"hhvm/type-assert": "^3.3",
 		"usox/hack-http-factory-interfaces": "^0.2"
 	},

@@ -10,7 +10,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{Experimental\File, Experimental\IO, Str};
+use namespace HH\Lib\{File, IO, Str};
 
 final class UploadedFile implements Message\UploadedFileInterface {
 
