@@ -10,7 +10,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{File, IO};
+use namespace HH\Lib\{File, IO, OS};
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
 use function Usox\HackMock\{mock, prospect};
@@ -85,17 +85,12 @@ class UploadedFileTest extends HackTest {
       );
   }
 
-  public function testMoveToMovesFile(): void {
+  public async function testMoveToMovesFile(): Awaitable<void> {
     $filename = \sys_get_temp_dir().'/'.\bin2hex(\random_bytes(16));
     $content = 'some-content';
-    $read_handle = mock(IO\ReadHandle::class);
-
-    prospect($read_handle, 'rawReadBlocking')
-      ->with(null)
-      ->once()
-      ->andReturn($content);
-    prospect($read_handle, 'closeAsync')
-      ->once();
+    list($read_handle, $write_handle) = IO\pipe_nd();
+    $write_handle->write($content);
+    await $write_handle->closeAsync();
 
     $file = new UploadedFile(
       $read_handle,
@@ -103,10 +98,14 @@ class UploadedFileTest extends HackTest {
     );
 
     $file->moveTo($filename);
+    $ex = expect(async () ==> await $read_handle->closeAsync())->toThrow(
+      OS\ErrnoException::class,
+    );
+    expect($ex->getErrno())->toEqual(OS\Errno::EBADF);
 
     $target_file = File\open_read_only_nd($filename);
 
-    expect($target_file->rawReadBlocking())
+    expect($target_file->read())
       ->toBeSame($content);
 
     // after moving the file, the readhandle becomes invalid
