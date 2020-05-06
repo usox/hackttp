@@ -52,7 +52,17 @@ final class UploadedFile implements Message\UploadedFileInterface {
 
   private async function writeAsync(string $target_path): Awaitable<void> {
     await using $target = File\open_write_only($target_path);
-    await $target->writeAsync($this->stream->rawReadBlocking());
+    // Doing this a chunk at a time instead of using `readAllAsync()` to reduce
+    // peak memory usage
+    do {
+      /* HHAST_IGNORE_ERROR[DontAwaitInALoop] */
+      $chunk = await $this->stream->readAsync();
+      if ($chunk === '') {
+        break;
+      }
+      /* HHAST_IGNORE_ERROR[DontAwaitInALoop] */
+      await $target->writeAsync($chunk);
+    } while (true);
     if ($this->stream is IO\CloseableHandle) {
       await $this->stream->closeAsync();
     }
