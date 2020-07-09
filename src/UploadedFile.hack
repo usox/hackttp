@@ -51,7 +51,8 @@ final class UploadedFile implements Message\UploadedFileInterface {
   }
 
   private async function writeAsync(string $target_path): Awaitable<void> {
-    await using $target = File\open_write_only($target_path);
+    $target = File\open_write_only($target_path);
+    using $target->closeWhenDisposed();
     // Doing this a chunk at a time instead of using `readAllAsync()` to reduce
     // peak memory usage
     do {
@@ -63,8 +64,9 @@ final class UploadedFile implements Message\UploadedFileInterface {
       /* HHAST_IGNORE_ERROR[DontAwaitInALoop] */
       await $target->writeAsync($chunk);
     } while (true);
+
     if ($this->stream is IO\CloseableHandle) {
-      await $this->stream->closeAsync();
+      $this->stream->close();
     }
   }
 

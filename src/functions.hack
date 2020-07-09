@@ -59,7 +59,7 @@ function create_response(
 	int $code = 200,
 	string $reason = '',
 ): Message\ResponseInterface {
-	$write_handle = File\open_write_only_nd(
+	$write_handle = File\open_write_only(
 		\sys_get_temp_dir().'/'.\bin2hex(\random_bytes(16)),
 		File\WriteMode::MUST_CREATE
 	);
