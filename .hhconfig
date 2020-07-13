@@ -37,3 +37,5 @@ safe_array = true
 safe_vector_array = true
 typecheck_xhp_cvars = true
 unsafe_rx = false
+allowed_decl_fixme_codes=2053,4047
+allowed_fixme_codes_strict=2011,2049,2050,2053,4026,4027,4047,4053,4104,4107,4108,4110,4128,4135,4188,4200,4240,4248,4323

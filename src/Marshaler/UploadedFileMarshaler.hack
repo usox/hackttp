@@ -72,7 +72,7 @@ final class UploadedFileMarshaler implements UploadedFileMarshalerInterface {
 		$error = $file['error'] === 0 ? null : Message\UploadedFileError::assert($file['error']);
 
 		return new UploadedFile(
-			File\open_read_only_nd($file['tmp_name']),
+			File\open_read_only($file['tmp_name']),
 			$file['size'],
 			$error,
 			$file['name'] ?? '',

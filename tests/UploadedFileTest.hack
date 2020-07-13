@@ -13,7 +13,7 @@ use namespace Facebook\Experimental\Http\Message;
 use namespace HH\Lib\{File, IO, OS};
 use type Facebook\HackTest\HackTest;
 use function Facebook\FBExpect\expect;
-use function Usox\HackMock\{mock, prospect};
+use function Usox\HackMock\mock;
 
 class UploadedFileTest extends HackTest {
 
@@ -88,9 +88,9 @@ class UploadedFileTest extends HackTest {
   public async function testMoveToMovesFile(): Awaitable<void> {
     $filename = \sys_get_temp_dir().'/'.\bin2hex(\random_bytes(16));
     $content = 'some-content';
-    list($read_handle, $write_handle) = IO\pipe_nd();
-    $write_handle->write($content);
-    await $write_handle->closeAsync();
+    list($read_handle, $write_handle) = IO\pipe();
+    await $write_handle->writeAllAsync($content);
+    $write_handle->close();
 
     $file = new UploadedFile(
       $read_handle,
@@ -98,12 +98,12 @@ class UploadedFileTest extends HackTest {
     );
 
     $file->moveTo($filename);
-    $ex = expect(async () ==> await $read_handle->closeAsync())->toThrow(
+    $ex = expect(() ==> $read_handle->close())->toThrow(
       OS\ErrnoException::class,
     );
     expect($ex->getErrno())->toEqual(OS\Errno::EBADF);
 
-    $target_file = File\open_read_only_nd($filename);
+    $target_file = File\open_read_only($filename);
 
     expect($target_file->read())
       ->toBeSame($content);
