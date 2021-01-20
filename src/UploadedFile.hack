@@ -57,12 +57,13 @@ final class UploadedFile implements Message\UploadedFileInterface {
     // peak memory usage
     do {
       /* HHAST_IGNORE_ERROR[DontAwaitInALoop] */
-      $chunk = await $this->stream->readAsync();
+      $chunk = await $this->stream->readAllowPartialSuccessAsync();
       if ($chunk === '') {
         break;
       }
+      // ... but we need to write everything we read, so writeAllAsync
       /* HHAST_IGNORE_ERROR[DontAwaitInALoop] */
-      await $target->writeAsync($chunk);
+      await $target->writeAllAsync($chunk);
     } while (true);
 
     if ($this->stream is IO\CloseableHandle) {
