@@ -9,7 +9,7 @@ async function main(): Awaitable<noreturn> {
 
   $response = $response->withAddedHeaderLine('X-ZOMG', 'aggi');
 
-  await $response->getBody()->writeAsync('foo');
+  await $response->getBody()->writeAllAsync('foo');
 
   $emitter = new \Usox\HackTTP\Response\TemporaryFileSapiEmitter();
   await $emitter->emitAsync($response);
