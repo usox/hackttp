@@ -10,7 +10,7 @@
 namespace Usox\HackTTP;
 
 use namespace Facebook\Experimental\Http\Message;
-use namespace HH\Lib\{File, IO, Str};
+use namespace HH\Lib\{File, IO};
 
 final class UploadedFile implements Message\UploadedFileInterface {
 
@@ -38,14 +38,22 @@ final class UploadedFile implements Message\UploadedFileInterface {
     }
   }
 
+  /**
+   * @deprecated HH\Asio\join() is bad for performance and could stall forever.
+   */
+  <<__Deprecated('Use moveToAsync instead')>>
   public function moveTo(string $target_path): void {
+    \HH\Asio\join($this->moveToAsync($target_path));
+  }
+
+  public async function moveToAsync(string $target_path): Awaitable<void> {
     $this->validateActive();
-    if (Str\length($target_path) === 0) {
+    if ($target_path === '') {
       throw new \InvalidArgumentException(
         'Invalid path provided for move operation; must be a non-empty string',
       );
     }
-    \HH\Asio\join($this->writeAsync($target_path));
+    await $this->writeAsync($target_path);
 
     $this->moved = true;
   }

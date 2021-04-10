@@ -78,7 +78,7 @@ class UploadedFileTest extends HackTest {
       Message\UploadedFileError::ERROR_CANCELED_BY_EXTENSION
     );
 
-    expect(() ==> $file->moveTo('/dev/null'))
+    expect(async () ==> await $file->moveToAsync('/dev/null'))
       ->toThrow(
         \RuntimeException::class,
         'Cannot retrieve stream due to upload error',
@@ -97,7 +97,7 @@ class UploadedFileTest extends HackTest {
       666
     );
 
-    $file->moveTo($filename);
+    await $file->moveToAsync($filename);
     $ex = expect(() ==> $read_handle->close())->toThrow(
       OS\ErrnoException::class,
     );
@@ -110,7 +110,7 @@ class UploadedFileTest extends HackTest {
 
     // after moving the file, the readhandle becomes invalid
 
-    expect(() ==> $file->moveTo('/dev/null'))
+    expect(async () ==> await $file->moveToAsync('/dev/null'))
       ->toThrow(
         \RuntimeException::class,
         'Cannot retrieve stream after it has already been moved',
