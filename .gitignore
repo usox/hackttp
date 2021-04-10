@@ -1,3 +1,4 @@
 composer.lock
 vendor
 *.hhast.parser-cache
+.var/
